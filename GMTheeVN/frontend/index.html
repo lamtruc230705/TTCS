@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang chủ - GMTheeVN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Maven Pro', sans-serif;
+            background: linear-gradient(135deg, #a8e6f8 0%, #b3f0ff 100%);
+            min-height: 100vh;
+        }
+
+        /* ===== HEADER / NAVBAR ===== */
+        header {
+            background: linear-gradient(135deg, #a8e6f8 0%, #b3f0ff 100%);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0052cc;
+            text-decoration: none;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+
+        nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        nav a {
+            color: #000;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #0052cc;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-login, .btn-register {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-login {
+            background: white;
+            color: #0052cc;
+            border: 2px solid #0052cc;
+        }
+
+        .btn-login:hover {
+            background: #0052cc;
+            color: white;
+        }
+
+        .btn-register {
+            background: #0052cc;
+            color: white;
+        }
+
+        .btn-register:hover {
+            background: #003a9f;
+        }
+
+        /* ===== BANNER ===== */
+        .banner {
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: visible;
+            padding: 0;
+            margin: 0;
+        }
+
+        .banner-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: contain;
+            max-width: 100%;
+        }
+
+
+       
+        /* ===== SECTION ===== */
+        .section {
+            padding: 50px 30px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 900;
+            color: #000;
+            background: rgba(255, 150, 100, 0.7);
+            padding: 12px 24px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 30px;
+        }
+
+        .section-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        /* ===== CARD ===== */
+        .card {
+            background: rgba(255, 180, 150, 0.6);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 180, 150, 0.8);
+        }
+
+        .card-image {
+            width: 100%;
+            height: 300px;
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 10px;
+        }
+
+        .card-description {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .see-more {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .see-more a {
+            color: #000;
+            text-decoration: underline;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .see-more a:hover {
+            color: #0052cc;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: rgba(200, 220, 240, 0.5);
+            padding: 40px 30px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .footer-title {
+            font-size: 18px;
+            font-weight: 900;
+            color: #000;
+            margin-bottom: 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .footer-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .footer-icon {
+            width: 30px;
+            height: 30px;
+            background: #0052cc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .footer-info h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 5px;
+        }
+
+        .footer-info p {
+            font-size: 13px;
+            color: #666;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            nav {
+                gap: 15px;
+            }
+
+            nav a {
+                font-size: 13px;
+            }
+
+            .banner-content h1 {
+                font-size: 32px;
+            }
+
+            .section-title {
+                font-size: 18px;
+            }
+
+            .section-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== HEADER ===== -->
+    <header>
+        <a href="#" class="logo">GMTheeVN</a>
+        <nav>
+            <a href="#home">Trang chủ</a>
+            <a href="#shop">Cửa hàng</a>
+            <a href="#members">Nghệ sỹ</a>
+            <div class="auth-buttons">
+                <a href="login.html" class="btn-login">Đăng nhập</a>
+                <a href="register.html" class="btn-register">Đăng ký</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ===== BANNER ===== -->
+    <section class="banner" id="home">
+        <div class="banner-content">
+            <img src="./images/trangchu.png" alt="Banner" class="banner-image">
+        </div>
+    </section>
+
+    <!-- ===== CỬA HÀNG ===== -->
+    <section class="section" id="shop">
+        <div class="section-title">CỬA HÀNG</div>
+        <div class="section-content">
+            <!-- Card 1 -->
+            <div class="card">
+                <div class="card-image">
+                    <img src="./images/cart/box1.webp" alt="Box Couple JimmySea">
+                </div>
+                <div class="card-title">Box Couple JimmySea</div>
+                <div class="card-description">Hộp quà tặng độc quyền</div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="card">
+                <div class="card-image">
+                    <img src="./images/cart/card1.webp" alt="Card Clover">
+                </div>
+                <div class="card-title">Card Clover</div>
+                <div class="card-description">Bộ thẻ ảnh độc quyền</div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="card">
+                <div class="card-image">
+                    <img src="./images/cart/tui1.webp" alt="Túi sách">
+                </div>
+                <div class="card-title">Túi sách</div>
+                <div class="card-description">Phụ kiện hữu ích</div>
+            </div>
+        </div>
+        <div class="see-more">
+            <a href="#shop">Xem thêm →</a>
+        </div>
+    </section>
+
+    <!-- ===== DIỄN VIÊN ===== -->
+    <section class="section" id="members">
+        <div class="section-title">DIỄN VIÊN</div>
+        <div class="section-content">
+            <div class="card">
+                <div class="card-image">
+                    <img src="./images/astist/joong.jpg" alt="Joong Archer">
+                </div>
+                <div class="card-title">Joong Archer</div>
+                <div class="card-description">Diễn viên </div>
+            </div>
+
+            <div class="card">
+                <div class="card-image">
+                    <img src="./images/astist/Boom.jpg" alt="Boom Tharatorn">
+                </div>
+                <div class="card-title">Boom Tharatorn</div>
+                <div class="card-description">Diễn viên </div>
+            </div>
+
+    
+            <div class="card">
+                <div class="card-image">
+                    <img src="./images/astist/aston.jpg" alt="Aston Ratiphat">
+                </div>
+                <div class="card-title">Aston Ratiphat</div>
+                <div class="card-description">Diễn viên </div>
+            </div>
+        </div>
+        <div class="see-more">
+            <a href="#members">Xem thêm →</a>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="footer-title">Thông tin liên hệ:</div>
+        <div class="footer-content">
+            <!-- Địa chỉ -->
+            <div class="footer-item">
+                <div class="footer-icon">📍</div>
+                <div class="footer-info">
+                    <h3>Địa chỉ:</h3>
+                    <p>Hà Đông, Hà Nội</p>
+                </div>
+            </div>
+
+            <!-- Điện thoại -->
+            <div class="footer-item">
+                <div class="footer-icon">📞</div>
+                <div class="footer-info">
+                    <h3>Số điện thoại:</h3>
+                    <p>19001900</p>
+                </div>
+            </div>
+
+            <!-- Email -->
+            <div class="footer-item">
+                <div class="footer-icon">✉️</div>
+                <div class="footer-info">
+                    <h3>Email:</h3>
+                    <p>GMTheeVN@gmail.com</p>
+                </div>
+            </div>
+
+            <!-- Website -->
+            <div class="footer-item">
+                <div class="footer-icon">🌐</div>
+                <div class="footer-info">
+                    <h3>Website:</h3>
+                    <p>www.GMTheeVN.com</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Card hover effect
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', function() {
+                alert('Sản phẩm: ' + this.querySelector('.card-title').textContent);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="../js/data.js"></script>
+</head>
+<body>
+
+<h2>Quản lý nghệ sĩ</h2>
+
+<table>
+<tr>
+<th>ID</th>
+<th>Tên</th>
+</tr>
+
+<script>
+artists.forEach(a=>{
+document.write(`
+<tr>
+<td>${a.id}</td>
+<td>${a.name}</td>
+</tr>
+`);
+});
+</script>
+
+</table>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="../js/data.js"></script>
+</head>
+<body>
+
+<h2>Quản lý sản phẩm</h2>
+
+<table>
+<tr>
+<th>ID</th>
+<th>Tên</th>
+<th>Giá</th>
+</tr>
+
+<script>
+products.forEach(p=>{
+document.write(`
+<tr>
+<td>${p.id}</td>
+<td>${p.name}</td>
+<td>${p.price}</td>
+</tr>
+`);
+});
+</script>
+
+</table>
+
+</body>
+</html>

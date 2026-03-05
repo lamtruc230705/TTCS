@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết diễn viên - GMTheeVN</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Maven Pro', sans-serif;
+            background: linear-gradient(135deg, #a8e6f8 0%, #b3f0ff 100%);
+            min-height: 100vh;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background: linear-gradient(135deg, #a8e6f8 0%, #b3f0ff 100%);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-bottom: 3px solid rgba(0, 82, 204, 0.3);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0052cc;
+            text-decoration: none;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        nav a {
+            color: #000;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #0052cc;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        .user-icon {
+            width: 35px;
+            height: 35px;
+            background: #0052cc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 50px;
+            align-items: start;
+        }
+
+        /* ===== ARTIST IMAGE ===== */
+        .artist-image-section {
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+
+        .artist-image {
+            width: 100%;
+            max-width: 350px;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .artist-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        /* ===== ARTIST INFO ===== */
+        .artist-info {
+            position: relative;
+        }
+
+        .artist-name {
+            font-size: 36px;
+            font-weight: 900;
+            color: #000;
+            margin-bottom: 30px;
+        }
+
+        .info-item {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .info-label {
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            color: #555;
+            font-size: 15px;
+        }
+
+        .info-value a {
+            color: #0052cc;
+            text-decoration: underline;
+            transition: all 0.3s ease;
+        }
+
+        .info-value a:hover {
+            color: #003a9f;
+        }
+
+        /* ===== FILMOGRAPHY ===== */
+        .filmography-section {
+            margin-top: 30px;
+        }
+
+        .filmography-title {
+            font-weight: 700;
+            font-size: 18px;
+            color: #000;
+            margin-bottom: 15px;
+        }
+
+        .filmography-list {
+            list-style: none;
+            padding-left: 20px;
+        }
+
+        .filmography-list li {
+            margin-bottom: 12px;
+            font-size: 15px;
+            color: #333;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .filmography-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #0052cc;
+            font-weight: bold;
+        }
+
+        /* ===== DECORATION ===== */
+        .decoration-top {
+            position: absolute;
+            top: 50px;
+            right: 20px;
+            width: 120px;
+            height: 120px;
+            opacity: 0.3;
+        }
+
+        .decoration-bottom {
+            position: absolute;
+            bottom: -100px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            opacity: 0.3;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 15px;
+                width: 100%;
+            }
+
+            .content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .artist-name {
+                font-size: 24px;
+            }
+
+            .artist-image {
+                max-width: 100%;
+            }
+
+            .decoration-top,
+            .decoration-bottom {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== HEADER ===== -->
+    <header>
+        <a href="#" class="logo">GMTheeVN</a>
+        <nav>
+            <a href="index.html">Trang chủ</a>
+            <a href="products.html">Cửa hàng</a>
+            <a href="astists.html">Nghệ sỹ</a>
+        </nav>
+        <div class="user-section">
+            <span>User1</span>
+            <div class="user-icon">👤</div>
+        </div>
+    </header>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="container">
+        <div class="content">
+            <!-- Artist Image -->
+            <div class="artist-image-section">
+                <img src="./images/astist/joong.jpg" alt="Joong Archer" class="artist-image">
+            </div>
+
+            <!-- Artist Info -->
+            <div class="artist-info">
+                <h1 class="artist-name">Joong: Archer Aydin</h1>
+
+                <div class="info-item">
+                    <div class="info-label">Ngày sinh:</div>
+                    <div class="info-value">10 tháng 3 năm 2001</div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Chiều cao: <div class="info-value">186 cm </div> </div>
+                    <div class="info-label">Cân nặng: <div class="info-value">72 kg </div></div>
+                    
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Partner:</div>
+                    <div class="info-value"><a href="#">Dunk Natachai</a></div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Linh vật:</div>
+                    <div class="info-value"><a href="#">Jadee</a></div>
+                </div>
+
+                <!-- Filmography -->
+                <div class="filmography-section">
+                    <div class="filmography-title">Các tác phẩm:</div>
+                    <ul class="filmography-list">
+                        <li>Dare You To Death (2025)</li>
+                        <li>The Heart Killers (2024)</li>
+                        <li>Hidden Agenda (2023)</li>
+                        <li>Our Skyy 2 (2023)</li>
+                        <li>The Warp Effect (2023)</li>
+                        <li>Star & Sky: Star in My Mind (2022)</li>
+                        <li>2Moons2 (2019)</li>
+                    </ul>
+                </div>
+
+                <!-- Decoration -->
+                <svg class="decoration-top" viewBox="0 0 120 120">
+                    <path d="M 20 80 Q 30 70 40 65 Q 50 60 60 65 Q 70 70 75 80 Q 80 70 90 65 Q 100 60 110 65 Q 120 70 120 80" 
+                          stroke="#d4a574" stroke-width="2" fill="none"/>
+                    <circle cx="35" cy="75" r="3" fill="#d4a574"/>
+                    <circle cx="55" cy="60" r="3" fill="#d4a574"/>
+                    <circle cx="75" cy="70" r="3" fill="#d4a574"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Bottom Decoration -->
+        <svg class="decoration-bottom" viewBox="0 0 150 150">
+            <path d="M 130 20 Q 120 30 110 35 Q 100 40 90 35 Q 80 30 75 20 Q 70 30 60 35 Q 50 40 40 35 Q 30 30 20 20" 
+                  stroke="#d4a574" stroke-width="2" fill="none"/>
+            <circle cx="115" cy="25" r="3" fill="#d4a574"/>
+            <circle cx="95" cy="40" r="3" fill="#d4a574"/>
+            <circle cx="75" cy="30" r="3" fill="#d4a574"/>
+        </svg>
+    </div>
+
+    <script>
+        // Scroll smooth
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

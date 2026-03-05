@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập - GMTheeVN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Maven Pro', sans-serif;
+            background: linear-gradient(135deg, #a8e6f8 0%, #b3f0ff 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            padding: 40px;
+        }
+
+        .logo {
+            position: fixed;          
+            top: 20px;                
+            left: 20px;               
+            z-index: 100;              
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0052cc;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 48px;
+            font-weight: 900;
+            color: #000;
+            margin: 40px 0;
+            letter-spacing: 2px;
+        }
+
+        .divider {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .divider-line {
+            display: inline-block;
+            width: 200px;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #d4a574, transparent);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 16px;
+            font-weight: 600;
+            color: #000;
+            margin-bottom: 12px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(200, 180, 180, 0.4);
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            background: rgba(200, 180, 180, 0.6);
+            box-shadow: 0 0 10px rgba(0, 82, 204, 0.2);
+        }
+
+        .form-group input::placeholder {
+            color: rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #5555ff 0%, #4444dd 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn-login:hover {
+            background: linear-gradient(135deg, #6666ff 0%, #5555ee 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(85, 85, 255, 0.3);
+        }
+
+        .btn-login:active {
+            transform: translateY(0);
+        }
+
+        /* Trang trí hoa văn */
+        .decoration {
+            position: fixed;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .decoration-top {
+            top: 15%;
+            left: 30%;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .decoration-bottom {
+            bottom: 5%;
+            right: 30%;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            transform: rotate(180deg); 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Logo -->
+        <div class="logo">
+            <div class="logo-text">GMTheeVN</div>
+        </div>
+
+        <!-- Title -->
+        <div class="title">ĐĂNG NHẬP</div>
+
+        <!-- Divider -->
+        <div class="divider">
+            <div class="divider-line"></div>
+        </div>
+
+        <!-- Form -->
+        <form>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Nhập email của bạn" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Mật khẩu:</label>
+                <input type="password" id="password" name="password" placeholder="Nhập mật khẩu" required>
+            </div>
+
+            <button type="submit" class="btn-login">Đăng nhập</button>
+        </form>
+    </div>
+
+   <img src="./images/hoavan.png" class="decoration decoration-top" alt="Hoa văn">
+   <img src="./images/hoavan.png" class="decoration decoration-bottom" alt="Hoa văn">
+</body>
+</html>

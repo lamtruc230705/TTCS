@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="css/style.css">
+<script src="js/data.js"></script>
+</head>
+<body>
+
+<div class="container">
+<h2>Danh sách nghệ sĩ</h2>
+<div class="card-container" id="list"></div>
+</div>
+
+<script>
+let list=document.getElementById("list");
+
+artists.forEach(a=>{
+list.innerHTML+=`
+<div class="card">
+<img src="${a.image}">
+<h3>${a.name}</h3>
+<p>${a.work}</p>
+<button onclick="location.href='artist-detail.html?id=${a.id}'">
+Xem chi tiết</button>
+</div>`;
+});
+</script>
+
+</body>
+</html>

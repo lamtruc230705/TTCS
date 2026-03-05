@@ -1,0 +1,21 @@
+<script src="../js/data.js"></script>
+
+<h2>Quản lý người dùng</h2>
+
+<table border="1">
+<tr>
+<th>Email</th>
+<th>Role</th>
+</tr>
+
+<script>
+users.forEach(u=>{
+document.write(`
+<tr>
+<td>${u.email}</td>
+<td>${u.role}</td>
+</tr>
+`);
+});
+</script>
+</table>
