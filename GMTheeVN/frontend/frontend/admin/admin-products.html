@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý cửa hàng - GMTheeVN</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Maven Pro', sans-serif;
+            background: linear-gradient(135deg, #a8e6f8 0%, #b3f0ff 100%);
+            min-height: 100vh;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background: linear-gradient(135deg, #a8e6f8 0%, #b3f0ff 100%);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 40px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-bottom: 3px solid rgba(0, 82, 204, 0.3);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+            color: #0052cc;
+            text-decoration: none;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            flex: 1;
+        }
+
+        nav a {
+            color: #000;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #0052cc;
+        }
+
+        nav a.active {
+            color: #0052cc;
+            font-weight: 900;
+            border-bottom: 3px solid #0052cc;
+            padding-bottom: 5px;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: #000;
+            margin-left: auto;
+        }
+
+        .user-icon {
+            width: 35px;
+            height: 35px;
+            background: #0052cc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 900;
+            color: #000;
+            margin-bottom: 30px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .back-button {
+            background: white;
+            color: #0052cc;
+            border: 2px solid #0052cc;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-family: 'Maven Pro', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            background: #0052cc;
+            color: white;
+        }
+
+        .add-button {
+            background: linear-gradient(135deg, #5555ff 0%, #4444dd 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-family: 'Maven Pro', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            margin-left: auto;
+        }
+
+        .add-button:hover {
+            background: linear-gradient(135deg, #6666ff 0%, #5555ee 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(85, 85, 255, 0.3);
+        }
+
+        /* ===== TABLE ===== */
+        .shops-table {
+            width: 100%;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-header {
+            background: rgba(255, 180, 150, 0.3);
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 2fr 2fr 2fr 1.5fr;
+            gap: 15px;
+            font-weight: 700;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .table-row {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 2fr 2fr 2fr 1.5fr;
+            gap: 15px;
+            align-items: center;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+        }
+
+        .table-row:hover {
+            background: rgba(255, 180, 150, 0.1);
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-edit, .btn-delete {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Maven Pro', sans-serif;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit {
+            background: #5555ff;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #4444dd;
+            transform: translateY(-2px);
+        }
+
+        .btn-delete {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 15px;
+                width: 100%;
+            }
+
+            .user-section {
+                margin-left: 0;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .add-button {
+                margin-left: 0;
+            }
+
+            .table-header,
+            .table-row {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .page-title {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== HEADER ===== -->
+    <header>
+        <a href="index.html" class="logo">GMTheeVN</a>
+        <nav>
+            <a href="index.html">Trang chủ</a>
+            <a href="dashboard.html">Quản lý</a>
+        </nav>
+        <div class="user-section">
+            <span>Admin</span>
+            <div class="user-icon">👤</div>
+        </div>
+    </header>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="container">
+        <h1 class="page-title">🏪 Quản lý cửa hàng</h1>
+
+        <div class="controls">
+            <a href="dashboard.html" class="back-button">← Quay lại</a>
+            <button class="add-button">➕ Thêm sản phẩm mới</button>
+        </div>
+
+        <div class="shops-table">
+            <div class="table-header">
+                <div>ID</div>
+                <div>Tên sản phẩm</div>
+                <div>Giá</div>
+                <div>Số lượng</div>
+                <div>Hành động</div>
+            </div>
+
+            <div class="table-row">
+                <div>#1</div>
+                <div>Box JimmySea </div>
+                <div>1đ</div>
+                <div>25</div>
+                <div class="btn-group">
+                    <button class="btn-edit">Sửa</button>
+                    <button class="btn-delete">Xóa</button>
+                </div>
+            </div>
+
+            <div class="table-row">
+                <div>#2</div>
+                <div>Card Clover </div>
+                <div>1đ</div>
+                <div>50</div>
+                <div class="btn-group">
+                    <button class="btn-edit">Sửa</button>
+                    <button class="btn-delete">Xóa</button>
+                </div>
+            </div>
+
+            <div class="table-row">
+                <div>#3</div>
+                <div>Túi sách GMTheeVN </div>
+                <div>1đ</div>
+                <div>30</div>
+                <div class="btn-group">
+                    <button class="btn-edit">Sửa</button>
+                    <button class="btn-delete">Xóa</button>
+                </div>
+            </div>
+
+            <div class="table-row">
+                <div>#4</div>
+                <div>Áo Phông Domiia </div>
+                <div>1đ</div>
+                <div>40</div>
+                <div class="btn-group">
+                    <button class="btn-edit">Sửa</button>
+                    <button class="btn-delete">Xóa</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            window.location.href = "dashboard.html";
+        }
+        
+        // Add button
+        document.querySelector('.add-button').addEventListener('click', () => {
+            alert('Chức năng thêm sản phẩm mới sắp ra mắt!');
+        });
+
+        // Edit buttons
+        document.querySelectorAll('.btn-edit').forEach(btn => {
+            btn.addEventListener('click', () => {
+                alert('Chức năng chỉnh sửa sắp ra mắt!');
+            });
+        });
+
+        // Delete buttons
+        document.querySelectorAll('.btn-delete').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (confirm('Bạn có chắc chắn muốn xóa?')) {
+                    btn.parentElement.parentElement.remove();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

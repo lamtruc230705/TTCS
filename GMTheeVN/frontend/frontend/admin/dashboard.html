@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý - GMTheeVN</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Maven Pro', sans-serif;
+            background: linear-gradient(135deg, #a8e6f8 0%, #b3f0ff 100%);
+            min-height: 100vh;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background: linear-gradient(135deg, #a8e6f8 0%, #b3f0ff 100%);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 40px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-bottom: 3px solid rgba(0, 82, 204, 0.3);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+            color: #0052cc;
+            text-decoration: none;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            flex: 1;
+        }
+
+        nav a {
+            color: #000;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #0052cc;
+        }
+
+        nav a.active {
+            color: #0052cc;
+            font-weight: 900;
+            border-bottom: 3px solid #0052cc;
+            padding-bottom: 5px;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: #000;
+            margin-left: auto;
+        }
+
+        .user-icon {
+            width: 35px;
+            height: 35px;
+            background: #0052cc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 100px);
+        }
+
+        /* ===== ADMIN MENU ===== */
+        .admin-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .menu-title {
+            font-size: 18px;
+            color: #0052cc;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .menu-item {
+            font-size: 36px;
+            font-weight: 900;
+            color: #000;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            padding: 20px 50px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            min-width: 500px;
+            text-align: center;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            color: #0052cc;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 15px;
+                width: 100%;
+            }
+
+            .user-section {
+                margin-left: 0;
+            }
+
+            .menu-item {
+                min-width: 100%;
+                font-size: 24px;
+                padding: 15px 30px;
+            }
+
+            .decoration-top,
+            .decoration-bottom {
+                display: none;
+            }
+
+            .container {
+                padding: 30px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== HEADER ===== -->
+    <header>
+        <a href="../index.html" class="logo">GMTheeVN</a>
+        <nav>
+            <a href="index.html">Trang chủ</a>
+            <a href="dashboard.html">Quản lý</a>
+        </nav>
+        <div class="user-section">
+            <span>Admin</span>
+            <div class="user-icon">👤</div>
+        </div>
+    </header>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="container">
+        <div class="admin-menu">
+            <div style="text-align: center; margin-bottom: 40px;">
+                <h1 style="font-size: 40px; color: #000; margin-bottom: 10px;">Quản lý</h1>
+            </div>
+
+            <a href="admin-users.html" class="menu-item">
+                👥 Quản lý người dùng
+            </a>
+
+            <a href="admin-products.html" class="menu-item">
+                🏪 Quản lý cửa hàng
+            </a>
+
+            <a href="admin-artists.html" class="menu-item">
+                🎭 Quản lý nghệ sỹ
+            </a>
+
+            <a href="admin-orders.html" class="menu-item">
+                📦 Quản lý đơn mua hàng
+            </a>
+
+        </div>
+    </div>
+</body>
+</html>
