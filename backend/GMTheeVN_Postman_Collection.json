@@ -1,0 +1,383 @@
+{
+	"info": {
+		"_postman_id": "238c2403-1caf-4c1b-b3ec-9546e4a56a0e",
+		"name": "GMTheeVN Backend API",
+		"description": "GMTheeVN Backend API Collection - Updated for MySQL Database",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12345678"
+	},
+	"item": [
+		{
+			"name": "1. Test Server",
+			"item": [
+				{
+					"name": "GET /test - Check Server Status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/test",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"test"
+							]
+						},
+						"description": "Kiểm tra server có hoạt động không"
+					},
+					"response": []
+				}
+			],
+			"description": "Test basic server functionality"
+		},
+		{
+			"name": "2. Authentication (✅ Working)",
+			"item": [
+				{
+					"name": "POST /api/auth/register - Register User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"testuser123\",\n  \"email\": \"test123@gmail.com\",\n  \"password\": \"password123\",\n  \"phone\": \"0123456789\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						},
+						"description": "Đăng ký tài khoản mới. API này đang hoạt động với database MySQL."
+					},
+					"response": []
+				},
+				{
+					"name": "POST /api/auth/login - Login User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"test123@gmail.com\",\n  \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Đăng nhập và nhận JWT token. Token sẽ được lưu vào biến môi trường 'token'."
+					},
+					"response": []
+				},
+				{
+					"name": "GET /api/auth/me - Get Current User (Requires Auth)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/me",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"me"
+							]
+						},
+						"description": "Lấy thông tin người dùng hiện tại. Cần JWT token trong header Authorization."
+					},
+					"response": []
+				}
+			],
+			"description": "Authentication APIs - Đang hoạt động đầy đủ với database MySQL"
+		},
+		{
+			"name": "3. Products (⚠️ Disabled - MSSQL Syntax)",
+			"item": [
+				{
+					"name": "GET /api/products - Get All Products",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/products?limit=10&page=1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"products"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						},
+						"description": "⚠️ API này hiện tại bị disabled vì đang dùng MSSQL syntax. Cần convert sang MySQL syntax trong controller."
+					},
+					"response": []
+				},
+				{
+					"name": "GET /api/products/:id - Get Product Detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/products/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"1"
+							]
+						},
+						"description": "⚠️ API này hiện tại bị disabled vì đang dùng MSSQL syntax."
+					},
+					"response": []
+				}
+			],
+			"description": "Product APIs - Tạm thời disabled, cần sửa MSSQL → MySQL syntax"
+		},
+		{
+			"name": "4. Artists (⚠️ Disabled - MSSQL Syntax)",
+			"item": [
+				{
+					"name": "GET /api/artists - Get All Artists",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/artists",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"artists"
+							]
+						},
+						"description": "⚠️ API này hiện tại bị disabled vì đang dùng MSSQL syntax."
+					},
+					"response": []
+				},
+				{
+					"name": "GET /api/artists/:id - Get Artist Detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/artists/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"artists",
+								"1"
+							]
+						},
+						"description": "⚠️ API này hiện tại bị disabled vì đang dùng MSSQL syntax."
+					},
+					"response": []
+				}
+			],
+			"description": "Artist APIs - Tạm thời disabled, cần sửa MSSQL → MySQL syntax"
+		},
+		{
+			"name": "5. Cart & Orders (⚠️ Disabled - MSSQL Syntax)",
+			"item": [
+				{
+					"name": "GET /api/cart/my-cart - Get User Cart",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/cart/my-cart",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"cart",
+								"my-cart"
+							]
+						},
+						"description": "⚠️ API này hiện tại bị disabled vì đang dùng MSSQL syntax."
+					},
+					"response": []
+				},
+				{
+					"name": "POST /api/cart/items - Add to Cart",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"product_id\": 1,\n  \"quantity\": 2\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/cart/items",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"cart",
+								"items"
+							]
+						},
+						"description": "⚠️ API này hiện tại bị disabled vì đang dùng MSSQL syntax."
+					},
+					"response": []
+				}
+			],
+			"description": "Cart & Order APIs - Tạm thời disabled, cần sửa MSSQL → MySQL syntax"
+		},
+		{
+			"name": "6. Admin APIs (⚠️ Disabled - MSSQL Syntax)",
+			"item": [
+				{
+					"name": "GET /api/admin/dashboard - Admin Dashboard",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/dashboard",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"dashboard"
+							]
+						},
+						"description": "⚠️ API này hiện tại bị disabled vì đang dùng MSSQL syntax. Cần role 'admin'."
+					},
+					"response": []
+				},
+				{
+					"name": "GET /api/admin/users - Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"users"
+							]
+						},
+						"description": "⚠️ API này hiện tại bị disabled vì đang dùng MSSQL syntax. Cần role 'admin'."
+					},
+					"response": []
+				}
+			],
+			"description": "Admin APIs - Tạm thời disabled, cần sửa MSSQL → MySQL syntax và role 'admin'"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Auto-save token after login",
+					"if (pm.response.code === 200 && pm.request.url.path.includes('login')) {",
+					"    const response = pm.response.json();",
+					"    if (response.success && response.data.token) {",
+					"        pm.environment.set('token', response.data.token);",
+					"        console.log('Token saved to environment:', response.data.token.substring(0, 20) + '...');",
+					"    }",
+					"}"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

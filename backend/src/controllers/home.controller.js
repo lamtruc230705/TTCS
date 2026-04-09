@@ -1,27 +1,17 @@
-const { connectDB } = require("../configs/db");
 const { successResponse, errorResponse } = require("../utils/response");
 
 exports.summary = async (req, res) => {
   try {
-    const pool = await connectDB();
-
-    const artists = await pool.request().query(`
-      SELECT TOP 5 artist_id, stage_name, image
-      FROM artists
-      WHERE is_active = 1
-      ORDER BY created_at DESC
-    `);
-
-    const products = await pool.request().query(`
-      SELECT TOP 8 product_id, name, price, image
-      FROM products
-      WHERE status = 'active'
-      ORDER BY created_at DESC
-    `);
-
-    return successResponse(res, "Lấy dữ liệu trang chủ thành công", {
-      featuredArtists: artists.recordset,
-      featuredProducts: products.recordset
+    // Mock data khi DB không available
+    return successResponse(res, "Lấy dữ liệu trang chủ thành công (mock data)", {
+      featuredArtists: [
+        { artist_id: 1, stage_name: "Artist 1", image: "image1.jpg" },
+        { artist_id: 2, stage_name: "Artist 2", image: "image2.jpg" }
+      ],
+      featuredProducts: [
+        { product_id: 1, name: "Product 1", price: 100, image: "product1.jpg" },
+        { product_id: 2, name: "Product 2", price: 200, image: "product2.jpg" }
+      ]
     });
   } catch (error) {
     return errorResponse(res, error.message, 500);

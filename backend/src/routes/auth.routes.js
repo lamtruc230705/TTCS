@@ -1,13 +1,11 @@
 // khai báo router cho auth
-
-const express = require("express");
+const express = require('express');
 const router = express.Router();
+const authController = require('../controllers/auth.controller');
+const authMiddleware = require('../middlewares/auth.middleware');
 
-const authController = require("../controllers/auth.controller");
-const authMiddleware = require("../middlewares/auth.middleware");
-
-router.post("/register", authController.register);
-router.post("/login", authController.login);
-router.get("/me", authMiddleware, authController.me);
+router.post('/register', authController.register);
+router.post('/login', authController.login);
+router.get('/me', authMiddleware, authController.getCurrentUser);
 
 module.exports = router;

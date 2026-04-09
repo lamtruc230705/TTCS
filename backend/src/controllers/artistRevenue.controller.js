@@ -7,7 +7,15 @@ exports.getRevenueSummary = async (req, res) => {
 
     const artistResult = await pool.request()
       .input("user_id", sql.Int, req.user.user_id)
-      .query(`SELECT artist_id FROM artists WHERE user_id = @user_id`);
+      .query(`
+        SELECT artist_id
+        FROM artists
+        WHERE user_id = @user_id
+      `);
+
+    if (artistResult.recordset.length === 0) {
+      return errorResponse(res, "Không tìm thấy hồ sơ nghệ sĩ", 404);
+    }
 
     const artistId = artistResult.recordset[0].artist_id;
 

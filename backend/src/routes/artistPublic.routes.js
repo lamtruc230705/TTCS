@@ -1,56 +1,10 @@
-const { connectDB, sql } = require("../configs/db");
-const { successResponse, errorResponse } = require("../utils/response");
+const express = require("express");
+const router = express.Router();
 
-exports.getAllArtists = async (req, res) => {
-  try {
-    const pool = await connectDB();
-    const result = await pool.request().query(`
-      SELECT artist_id, stage_name, full_name, image
-      FROM artists
-      WHERE is_active = 1
-      ORDER BY created_at DESC
-    `);
+const artistPublicController = require("../controllers/artistPublic.controller");
 
-    return successResponse(res, "Lấy danh sách nghệ sĩ thành công", result.recordset);
-  } catch (error) {
-    return errorResponse(res, error.message, 500);
-  }
-};
+router.get("/", artistPublicController.getAllArtists);
+router.get("/:id", artistPublicController.getArtistDetail);
+router.get("/:id/products", artistPublicController.getArtistProducts);
 
-exports.getArtistDetail = async (req, res) => {
-  try {
-    const pool = await connectDB();
-    const result = await pool.request()
-      .input("artist_id", sql.Int, req.params.id)
-      .query(`
-        SELECT *
-        FROM artists
-        WHERE artist_id = @artist_id AND is_active = 1
-      `);
-
-    if (result.recordset.length === 0) {
-      return errorResponse(res, "Không tìm thấy nghệ sĩ", 404);
-    }
-
-    return successResponse(res, "Lấy chi tiết nghệ sĩ thành công", result.recordset[0]);
-  } catch (error) {
-    return errorResponse(res, error.message, 500);
-  }
-};
-
-exports.getArtistProducts = async (req, res) => {
-  try {
-    const pool = await connectDB();
-    const result = await pool.request()
-      .input("artist_id", sql.Int, req.params.id)
-      .query(`
-        SELECT product_id, name, price, image, stock
-        FROM products
-        WHERE artist_id = @artist_id AND status = 'active'
-      `);
-
-    return successResponse(res, "Lấy sản phẩm theo nghệ sĩ thành công", result.recordset);
-  } catch (error) {
-    return errorResponse(res, error.message, 500);
-  }
-};
+module.exports = router;

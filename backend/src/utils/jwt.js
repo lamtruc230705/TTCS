@@ -1,24 +1,19 @@
 // Tạo token đăng nhập + Xác minh token
 
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
+const env = require('../configs/env');
 
-function generateToken(user) {
-  return jwt.sign(
-    {
-      user_id: user.user_id,
-      email: user.email,
-      role: user.role
-    },
-    process.env.JWT_SECRET,
-    { expiresIn: "1d" }
-  );
+function signToken(payload) {
+  return jwt.sign(payload, env.jwt.secret, {
+    expiresIn: env.jwt.expiresIn
+  });
 }
 
 function verifyToken(token) {
-  return jwt.verify(token, process.env.JWT_SECRET);
+  return jwt.verify(token, env.jwt.secret);
 }
 
 module.exports = {
-  generateToken,
+  signToken,
   verifyToken
 };

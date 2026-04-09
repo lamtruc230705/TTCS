@@ -1,9 +1,11 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const artistController = require("../controllers/artistPublic.controller");
+const productController = require('../controllers/product.controller');
+const authMiddleware = require('../middlewares/auth.middleware');
+const roleMiddleware = require('../middlewares/role.middleware');
 
-router.get("/", artistController.getAllArtists);
-router.get("/:id", artistController.getArtistDetail);
-router.get("/:id/products", artistController.getArtistProducts);
+router.get('/', productController.getAllProducts);
+router.get('/:id', productController.getProductById);
+router.post('/', authMiddleware, roleMiddleware('admin', 'artist'), productController.createProduct);
 
 module.exports = router;
