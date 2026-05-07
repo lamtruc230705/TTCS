@@ -1,31 +1,34 @@
-//Kiểm tra người dùng đăng nhập
-// đọc token từ header, xác minh token, gắn thông tin người dùng vào req.user
+const { verifyToken } = require('../utils/jwt');
+const { query } = require('../config/database');
 
-const jwt = require('jsonwebtoken');
-require('dotenv').config();
-
-function authMiddleware(req, res, next) {
+async function auth(req, res, next) {
   try {
-    const authHeader = req.headers.authorization;
+    const header = req.headers.authorization || '';
+    const token = header.startsWith('Bearer ') ? header.slice(7) : null;
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json({
-        success: false,
-        message: 'Bạn chưa đăng nhập'
-      });
+    if (!token) {
+      return res.status(401).json({ success: false, message: 'Vui long dang nhap.' });
     }
 
-    const token = authHeader.split(' ')[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = verifyToken(token);
+    const users = await query(
+      'SELECT id, username, full_name, email, phone, avatar, role, status, created_at FROM users WHERE id = ?',
+      [decoded.id]
+    );
 
-    req.user = decoded;
+    if (!users.length) {
+      return res.status(401).json({ success: false, message: 'Tai khoan khong ton tai.' });
+    }
+
+    if (users[0].status !== 'active') {
+      return res.status(403).json({ success: false, message: 'Tai khoan da bi khoa.' });
+    }
+
+    req.user = users[0];
     next();
   } catch (error) {
-    return res.status(401).json({
-      success: false,
-      message: 'Token không hợp lệ hoặc đã hết hạn'
-    });
+    return res.status(401).json({ success: false, message: 'Token khong hop le hoac da het han.' });
   }
 }
 
-module.exports = authMiddleware;
+module.exports = auth;

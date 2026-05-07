@@ -1,11 +1,13 @@
-// khai báo router cho auth
 const express = require('express');
-const router = express.Router();
 const authController = require('../controllers/auth.controller');
-const authMiddleware = require('../middlewares/auth.middleware');
+const auth = require('../middlewares/auth.middleware');
+const validate = require('../middlewares/validate.middleware');
+const { registerSchema, loginSchema } = require('../validations/auth.validation');
 
-router.post('/register', authController.register);
-router.post('/login', authController.login);
-router.get('/me', authMiddleware, authController.getCurrentUser);
+const router = express.Router();
+
+router.post('/register', validate(registerSchema), authController.register);
+router.post('/login', validate(loginSchema), authController.login);
+router.get('/me', auth, authController.me);
 
 module.exports = router;

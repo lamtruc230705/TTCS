@@ -1,25 +1,15 @@
-// chặn quyền truy cập sai vai trò
-
-function roleMiddleware(...roles) {
-  return (req, res, next) => {
+function authorize(...roles) {
+  return function roleMiddleware(req, res, next) {
     if (!req.user) {
-      return res.status(401).json({
-        success: false,
-        message: 'Bạn chưa đăng nhập'
-      });
+      return res.status(401).json({ success: false, message: 'Vui long dang nhap.' });
     }
 
     if (!roles.includes(req.user.role)) {
-      return res.status(403).json({
-        success: false,
-        message: 'Bạn không có quyền truy cập'
-      });
+      return res.status(403).json({ success: false, message: 'Ban khong co quyen truy cap.' });
     }
 
     next();
   };
 }
 
-// Export as both direct function and as object property
-module.exports = roleMiddleware;
-module.exports.authorize = roleMiddleware;
+module.exports = authorize;

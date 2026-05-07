@@ -1,24 +1,21 @@
-// validate dữ liệu đầu vào bằng Joi
-
-const { errorResponse } = require("../utils/response");
-
-module.exports = (schema, target = "body") => {
-  return (req, res, next) => {
-    const { error, value } = schema.validate(req[target], {
+function validate(schema) {
+  return function validateMiddleware(req, res, next) {
+    const { error, value } = schema.validate(req.body, {
       abortEarly: false,
-      stripUnknown: true,
+      stripUnknown: true
     });
 
     if (error) {
-      return errorResponse(
-        res,
-        "Dữ liệu không hợp lệ",
-        422,
-        error.details.map((item) => item.message)
-      );
+      return res.status(422).json({
+        success: false,
+        message: 'Du lieu khong hop le.',
+        details: error.details.map((item) => item.message)
+      });
     }
 
-    req[target] = value;
+    req.body = value;
     next();
   };
-};
+}
+
+module.exports = validate;

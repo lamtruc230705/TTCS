@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS orders (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  order_code VARCHAR(50) NOT NULL UNIQUE,
+  user_id INT NOT NULL,
+  customer_name VARCHAR(150) NULL,
+  customer_email VARCHAR(150) NULL,
+  customer_phone VARCHAR(20) NULL,
+  subtotal DECIMAL(12,2) NOT NULL DEFAULT 0,
+  shipping_fee DECIMAL(12,2) NOT NULL DEFAULT 25000,
+  total_amount DECIMAL(12,2) NOT NULL DEFAULT 0,
+  status ENUM('pending', 'processing', 'shipping', 'delivered', 'cancelled') NOT NULL DEFAULT 'pending',
+  payment_status ENUM('unpaid', 'paid') NOT NULL DEFAULT 'paid',
+  note TEXT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_orders_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  INDEX idx_orders_user (user_id),
+  INDEX idx_orders_status (status),
+  INDEX idx_orders_created_at (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -1,124 +1,42 @@
-const { connectDB, sql } = require("../configs/db");
-const { successResponse, errorResponse } = require("../utils/response");
+const asyncHandler = require('../utils/asyncHandler');
+const { success } = require('../utils/response');
+const service = require('../services/cart.service');
 
-exports.getCart = async (req, res) => {
-  try {
-    const pool = await connectDB();
+const getCart = asyncHandler(async (req, res) => {
+  const data = await service.getCart(req.user.id);
+  return success(res, 'Lay gio hang thanh cong.', data);
+});
 
-    const cartResult = await pool.request()
-      .input("user_id", sql.Int, req.user.user_id)
-      .query(`SELECT * FROM carts WHERE user_id = @user_id`);
+const addToCart = asyncHandler(async (req, res) => {
+  const data = await service.addToCart(req.user.id, req.body);
+  return success(res, 'Them san pham vao gio hang thanh cong.', data, 201);
+});
 
-    if (cartResult.recordset.length === 0) {
-      return successResponse(res, "Giỏ hàng trống", []);
-    }
+const updateCartItem = asyncHandler(async (req, res) => {
+  const data = await service.updateCartItem(req.user.id, req.params.id, req.body.quantity);
+  return success(res, 'Cap nhat gio hang thanh cong.', data);
+});
 
-    const cart = cartResult.recordset[0];
+const deleteCartItem = asyncHandler(async (req, res) => {
+  await service.deleteCartItem(req.user.id, req.params.id);
+  return success(res, 'Xoa san pham khoi gio hang thanh cong.');
+});
 
-    const items = await pool.request()
-      .input("cart_id", sql.Int, cart.cart_id)
-      .query(`
-        SELECT ci.cart_item_id, ci.quantity, ci.unit_price,
-               p.product_id, p.name, p.image, p.stock
-        FROM cart_items ci
-        JOIN products p ON ci.product_id = p.product_id
-        WHERE ci.cart_id = @cart_id
-      `);
+const selectCartItem = asyncHandler(async (req, res) => {
+  const data = await service.selectCartItem(req.user.id, req.params.id, req.body.is_selected);
+  return success(res, 'Cap nhat trang thai chon thanh cong.', data);
+});
 
-    return successResponse(res, "Lấy giỏ hàng thành công", items.recordset);
-  } catch (error) {
-    return errorResponse(res, error.message, 500);
-  }
-};
+const selectAll = asyncHandler(async (req, res) => {
+  const data = await service.selectAll(req.user.id, req.body.is_selected);
+  return success(res, 'Cap nhat chon tat ca thanh cong.', data);
+});
 
-exports.addToCart = async (req, res) => {
-  try {
-    const { product_id, quantity } = req.body;
-    const pool = await connectDB();
-
-    const cartResult = await pool.request()
-      .input("user_id", sql.Int, req.user.user_id)
-      .query(`SELECT * FROM carts WHERE user_id = @user_id`);
-
-    const cart = cartResult.recordset[0];
-
-    const productResult = await pool.request()
-      .input("product_id", sql.Int, product_id)
-      .query(`SELECT * FROM products WHERE product_id = @product_id AND status = 'active'`);
-
-    if (productResult.recordset.length === 0) {
-      return errorResponse(res, "Sản phẩm không tồn tại", 404);
-    }
-
-    const product = productResult.recordset[0];
-
-    const existingItem = await pool.request()
-      .input("cart_id", sql.Int, cart.cart_id)
-      .input("product_id", sql.Int, product_id)
-      .query(`
-        SELECT * FROM cart_items
-        WHERE cart_id = @cart_id AND product_id = @product_id
-      `);
-
-    if (existingItem.recordset.length > 0) {
-      await pool.request()
-        .input("cart_id", sql.Int, cart.cart_id)
-        .input("product_id", sql.Int, product_id)
-        .input("quantity", sql.Int, quantity)
-        .query(`
-          UPDATE cart_items
-          SET quantity = quantity + @quantity, updated_at = GETDATE()
-          WHERE cart_id = @cart_id AND product_id = @product_id
-        `);
-    } else {
-      await pool.request()
-        .input("cart_id", sql.Int, cart.cart_id)
-        .input("product_id", sql.Int, product_id)
-        .input("quantity", sql.Int, quantity)
-        .input("unit_price", sql.Decimal(18, 2), product.price)
-        .query(`
-          INSERT INTO cart_items (cart_id, product_id, quantity, unit_price, created_at, updated_at)
-          VALUES (@cart_id, @product_id, @quantity, @unit_price, GETDATE(), GETDATE())
-        `);
-    }
-
-    return successResponse(res, "Thêm vào giỏ hàng thành công");
-  } catch (error) {
-    return errorResponse(res, error.message, 500);
-  }
-};
-
-exports.updateCartItem = async (req, res) => {
-  try {
-    const { quantity } = req.body;
-    const { itemId } = req.params;
-    const pool = await connectDB();
-
-    await pool.request()
-      .input("itemId", sql.Int, itemId)
-      .input("quantity", sql.Int, quantity)
-      .query(`
-        UPDATE cart_items
-        SET quantity = @quantity, updated_at = GETDATE()
-        WHERE cart_item_id = @itemId
-      `);
-
-    return successResponse(res, "Cập nhật giỏ hàng thành công");
-  } catch (error) {
-    return errorResponse(res, error.message, 500);
-  }
-};
-
-exports.deleteCartItem = async (req, res) => {
-  try {
-    const pool = await connectDB();
-
-    await pool.request()
-      .input("itemId", sql.Int, req.params.itemId)
-      .query(`DELETE FROM cart_items WHERE cart_item_id = @itemId`);
-
-    return successResponse(res, "Xóa sản phẩm khỏi giỏ hàng thành công");
-  } catch (error) {
-    return errorResponse(res, error.message, 500);
-  }
+module.exports = {
+  getCart,
+  addToCart,
+  updateCartItem,
+  deleteCartItem,
+  selectCartItem,
+  selectAll
 };
