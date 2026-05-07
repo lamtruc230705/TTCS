@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết diễn viên - GMTheeVN</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Maven Pro', sans-serif;
+            background: linear-gradient(135deg, #a8e6f8 0%, #b3f0ff 100%);
+            min-height: 100vh;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background: linear-gradient(135deg, #a8e6f8 0%, #b3f0ff 100%);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-start;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-bottom: 3px solid rgba(0, 82, 204, 0.3);
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0052cc;
+            text-decoration: none;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+            margin-left: 14px;
+            align-items: center;
+        }
+
+        nav a {
+            color: #000;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #0052cc;
+        }
+
+        .user-section {
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+           gap: 4px;
+           font-weight: 600;
+           color: #000;
+           margin-left: auto;
+        }
+
+        .user-info {
+           display: flex;
+           align-items: center;
+           gap: 10px;
+        }
+        .user-icon {
+            width: 35px;
+            height: 35px;
+            background: #0052cc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+        .logout-link {
+            color: #ff5252;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1;
+            transition: all 0.3s ease;
+        }
+
+        .logout-link:hover {
+            color: #d93636;
+            text-decoration: underline;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 50px;
+            align-items: start;
+        }
+
+        /* ===== ARTIST IMAGE ===== */
+        .artist-image-section {
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+
+        .artist-image {
+            width: 100%;
+            max-width: 350px;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .artist-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+        }
+
+        /* ===== ARTIST INFO ===== */
+        .artist-info {
+            position: relative;
+        }
+
+        .artist-name {
+            font-size: 36px;
+            font-weight: 900;
+            color: #000;
+            margin-bottom: 30px;
+        }
+
+        .info-item {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .info-label {
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            color: #555;
+            font-size: 15px;
+        }
+
+        .info-value a {
+            color: #0052cc;
+            text-decoration: underline;
+            transition: all 0.3s ease;
+        }
+
+        .info-value a:hover {
+            color: #003a9f;
+        }
+
+        /* ===== FILMOGRAPHY ===== */
+        .filmography-section {
+            margin-top: 30px;
+        }
+
+        .filmography-title {
+            font-weight: 700;
+            font-size: 18px;
+            color: #000;
+            margin-bottom: 15px;
+        }
+
+        .filmography-list {
+            list-style: none;
+            padding-left: 20px;
+        }
+
+        .filmography-list li {
+            margin-bottom: 12px;
+            font-size: 15px;
+            color: #333;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .filmography-list li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #0052cc;
+            font-weight: bold;
+        }
+
+      
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 15px;
+                width: 100%;
+            }
+
+            .content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .artist-name {
+                font-size: 24px;
+            }
+
+            .artist-image {
+                max-width: 100%;
+            }
+
+            .decoration-top,
+            .decoration-bottom {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== HEADER ===== -->
+    <header>
+        <a href="index.html" class="logo">GMTheeVN</a>
+        <nav>
+            <a href="index.html">Trang chủ</a>
+            <a href="products.html">Cửa hàng</a>
+            <a href="astists.html">Nghệ sỹ</a>
+        </nav>
+        <div class="user-section">
+        <div class="user-info">
+             <span>User1</span>
+             <div class="user-icon">👤</div>
+        </div>
+        <a href="../login.html" class="logout-link" onclick="localStorage.removeItem('token'); localStorage.removeItem('user');">Đăng xuất</a>
+        </div>
+    </header>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="container">
+        <div class="content">
+            <!-- Artist Image -->
+            <div class="artist-image-section">
+                <img id="artistImage"="../images/astist/joong.jpg" alt="Joong Archer" class="artist-image">
+            </div>
+
+            <!-- Artist Info -->
+            <div class="artist-info">
+                <h1 class="artist-name" id="artistName">Đang tải...</h1>
+
+                <div class="info-item">
+                    <div class="info-label">Ngày sinh:</div>
+                    <div class="info-value" id="artistBirthDate">Đang tải...</div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">
+                        Chiều cao:
+                        <div class="info-value" id="artistHeight">Đang tải...</div>
+                    </div>
+                    <div class="info-label">
+                        Cân nặng:
+                        <div class="info-value" id="artistWeight">Đang tải...</div>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Partner:</div>
+                    <div class="info-value"><a href="#" id="artistPartner">Đang tải...</a></div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-label">Linh vật:</div>
+                    <div class="info-value"><a href="#" id="artistMascot">Đang tải...</a></div>
+                </div>
+
+                <!-- Filmography -->
+                <div class="filmography-section">
+                    <div class="filmography-title">Các tác phẩm:</div>
+                    <ul class="filmography-list" id="artistWorks">
+                        <li>Đang tải...</li>
+                    </ul>
+                </div>
+
+    </div>
+
+    <script src="../app.js"></script>
+    <script>
+    const localArtistImages = {
+        1: '../images/astist/joong.jpg',
+        2: '../images/astist/Boom.jpg',
+        3: '../images/astist/aston.jpg',
+        4: '../images/astist/dunk.jpg',
+        5: '../images/astist/win.jpg',
+        6: '../images/astist/force.jpg',
+        7: '../images/astist/aou.jpg',
+        8: '../images/astist/bookaside.jpg'
+    };
+
+    function getArtistIdFromUrl() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('id');
+    }
+
+    function formatBirthDate(dateString) {
+        if (!dateString) return 'Chưa cập nhật';
+
+        const date = new Date(dateString);
+        if (Number.isNaN(date.getTime())) return 'Chưa cập nhật';
+
+        return date.toLocaleDateString('vi-VN', {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric'
+        });
+    }
+
+    function setText(id, value) {
+        const element = document.getElementById(id);
+        if (element) {
+            element.textContent = value || 'Chưa cập nhật';
+        }
+    }
+
+    function renderWorks(works) {
+        const worksList = document.getElementById('artistWorks');
+
+        if (!worksList) return;
+
+        if (!Array.isArray(works) || works.length === 0) {
+            worksList.innerHTML = '<li>Chưa cập nhật tác phẩm.</li>';
+            return;
+        }
+
+        worksList.innerHTML = works.map(work => {
+            const year = work.release_year ? ` (${work.release_year})` : '';
+            return `<li>${work.title}${year}</li>`;
+        }).join('');
+    }
+
+    async function loadArtistDetail() {
+        const artistId = getArtistIdFromUrl();
+
+        if (!artistId) {
+            alert('Không tìm thấy mã nghệ sĩ trên đường dẫn.');
+            window.location.href = './astists.html';
+            return;
+        }
+
+        try {
+            const response = await APIClient.getArtistDetail(artistId);
+            const artist = response.data;
+
+            document.title = `${artist.stage_name || artist.full_name} - GMTheeVN`;
+
+            setText('artistName', artist.full_name || artist.stage_name);
+            setText('artistBirthDate', formatBirthDate(artist.birth_date));
+            setText('artistHeight', artist.height);
+            setText('artistWeight', artist.weight);
+            setText('artistPartner', artist.partner_name);
+            setText('artistMascot', artist.mascot);
+
+            const image = document.getElementById('artistImage');
+            if (image) {
+                image.alt = artist.stage_name || artist.full_name || 'Artist';
+
+                image.onerror = function () {
+                    image.onerror = null;
+                    image.src = localArtistImages[artistId] || '../images/astist/joong.jpg';
+                };
+
+                image.src = artist.image
+                    ? APIClient.getImageUrl(artist.image)
+                    : localArtistImages[artistId] || '../images/astist/joong.jpg';
+            }
+
+            renderWorks(artist.works);
+        } catch (error) {
+            console.error(error);
+            alert('Không tải được chi tiết nghệ sĩ.');
+            window.location.href = './astists.html';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadArtistDetail);
+    </script>
+</body>
+</html>

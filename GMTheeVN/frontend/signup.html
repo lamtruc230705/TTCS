@@ -171,6 +171,28 @@
             text-decoration: underline;
             color: #003a9f;
         }
+
+        .auth-message {
+            display: none;
+            margin-top: 16px;
+            padding: 12px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .auth-message.success {
+            display: block;
+            background: rgba(39, 174, 96, 0.15);
+            color: #146c43;
+        }
+
+        .auth-message.error {
+            display: block;
+            background: rgba(231, 76, 60, 0.15);
+            color: #b02a37;
+        }
     </style>
 </head>
 <body>
@@ -190,7 +212,7 @@
         </div>
 
         <!-- Form -->
-        <form>
+        <form id="registerForm">
             <!-- Tên đăng nhập -->
             <div class="form-group">
                 <label for="username">Tên đăng nhập:</label>
@@ -222,7 +244,8 @@
             </div>
 
             <!-- Button -->
-            <button type="submit" class="btn-register">Đăng ký</button>
+            <button type="submit" class="btn-register" id="registerButton">Đăng ký</button>
+            <div id="registerMessage" class="auth-message" aria-live="polite"></div>
 
             <!-- Link to login -->
             <div class="login-link">
@@ -231,20 +254,61 @@
         </form>
     </div>
 
-    <!-- ===== HÓA VĂN - ẢNH ===== -->
     <img src="./images/hoavan.png" class="decoration decoration-top" alt="Hoa văn">
    <img src="./images/hoavan.png" class="decoration decoration-bottom" alt="Hoa văn">
 
+    <script src="./app.js"></script>
     <script>
-        document.querySelector('form').addEventListener('submit', function(e) {
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
+    function showRegisterMessage(message, type = 'error') {
+        const messageBox = document.getElementById('registerMessage');
+        messageBox.textContent = message;
+        messageBox.className = `auth-message ${type}`;
+    }
 
-            if (password !== confirmPassword) {
-                e.preventDefault();
-                alert('Mật khẩu không khớp!');
-            }
-        });
+    document.getElementById('registerForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const username = document.getElementById('username').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+        const button = document.getElementById('registerButton');
+
+        if (!username || !email || !phone || !password || !confirmPassword) {
+            showRegisterMessage('Vui lòng nhập đầy đủ thông tin đăng ký.');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            showRegisterMessage('Mật khẩu không khớp!');
+            return;
+        }
+
+        try {
+            button.disabled = true;
+            button.textContent = 'Đang đăng ký...';
+
+            await APIClient.register({
+                username,
+                email,
+                phone,
+                password,
+                confirmPassword
+            });
+
+            showRegisterMessage('Đăng ký thành công! Đang chuyển sang trang đăng nhập...', 'success');
+
+            setTimeout(() => {
+                window.location.href = './login.html';
+            }, 800);
+        } catch (error) {
+            showRegisterMessage(error.message || 'Đăng ký thất bại. Vui lòng thử lại.');
+        } finally {
+            button.disabled = false;
+            button.textContent = 'Đăng ký';
+        }
+    });
     </script>
 </body>
 </html>

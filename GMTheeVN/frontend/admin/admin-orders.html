@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý nghệ sỹ - GMTheeVN</title>
+    <title>Quản lý đơn mua hàng - GMTheeVN</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
@@ -116,6 +116,7 @@
             color: #d93636;
             text-decoration: underline;
         }
+
         /* ===== MAIN CONTENT ===== */
         .container {
             max-width: 1400px;
@@ -175,7 +176,7 @@
         }
 
         /* ===== TABLE ===== */
-        .artists-table {
+        .orders-table {
             width: 100%;
             background: white;
             border-radius: 15px;
@@ -187,7 +188,7 @@
             background: rgba(255, 180, 150, 0.3);
             padding: 20px;
             display: grid;
-            grid-template-columns: 0.8fr 1.5fr 1.5fr 2fr 1.5fr 1.5fr;
+            grid-template-columns: 0.8fr 1.2fr 1.5fr 2fr 1.2fr 1.2fr 1.5fr;
             gap: 15px;
             font-weight: 700;
             border-bottom: 2px solid #f0f0f0;
@@ -197,7 +198,7 @@
         .table-row {
             padding: 20px;
             display: grid;
-            grid-template-columns: 0.8fr 1.5fr 1.5fr 2fr 1.5fr 1.5fr;
+            grid-template-columns: 0.8fr 1.2fr 1.5fr 2fr 1.2fr 1.2fr 1.5fr;
             gap: 15px;
             align-items: center;
             border-bottom: 1px solid #f0f0f0;
@@ -212,28 +213,64 @@
             border-bottom: none;
         }
 
-        /* ===== ARTIST INFO ===== */
-        .artist-info {
+        /* ===== ORDER INFO ===== */
+        .order-info {
             background: rgba(255, 255, 255, 0.5);
             padding: 12px;
             border-radius: 8px;
         }
 
-        .artist-info-item {
+        .order-info-item {
             font-size: 13px;
             color: #666;
             margin-bottom: 5px;
         }
 
-        .artist-info-item strong {
+        .order-info-item strong {
             color: #000;
             font-weight: 700;
         }
 
-        .artist-info-item:last-child {
+        .order-info-item:last-child {
             margin-bottom: 0;
         }
 
+        /* ===== STATUS BADGE ===== */
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-processing {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-shipped {
+            background: #cfe2ff;
+            color: #084298;
+        }
+
+        .status-delivered {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .status-cancelled {
+            background: #f8d7da;
+            color: #842029;
+        }
+
+        /* ===== TIME ===== */
         .time-updated {
             font-size: 13px;
             color: #999;
@@ -245,8 +282,8 @@
             gap: 8px;
         }
 
-        .btn-edit, .btn-delete {
-            padding: 8px 15px;
+        .btn-view, .btn-edit, .btn-delete {
+            padding: 8px 12px;
             border: none;
             border-radius: 6px;
             cursor: pointer;
@@ -257,13 +294,23 @@
             white-space: nowrap;
         }
 
-        .btn-edit {
+        .btn-view {
             background: #5555ff;
             color: white;
         }
 
-        .btn-edit:hover {
+        .btn-view:hover {
             background: #4444dd;
+            transform: translateY(-2px);
+        }
+
+        .btn-edit {
+            background: #ffa500;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #ff8c00;
             transform: translateY(-2px);
         }
 
@@ -278,7 +325,7 @@
         }
 
         /* ===== RESPONSIVE ===== */
-        @media (max-width: 1200px) {
+        @media (max-width: 1400px) {
             .table-header,
             .table-row {
                 grid-template-columns: 1fr;
@@ -318,7 +365,7 @@
                 flex-direction: column;
             }
 
-            .btn-edit, .btn-delete {
+            .btn-view, .btn-edit, .btn-delete {
                 width: 100%;
             }
         }
@@ -341,129 +388,133 @@
         </div>
     </header>
 
+
     <!-- ===== MAIN CONTENT ===== -->
     <div class="container">
-        <h1 class="page-title">🎭 Quản lý nghệ sỹ</h1>
+        <h1 class="page-title">📦 Quản lý đơn mua hàng</h1>
 
         <div class="controls">
             <button class="back-button" onclick="goBack()">← Quay lại</button>
-            <button class="add-button">➕ Thêm diễn viên mới</button>
         </div>
 
-        <div class="artists-table">
+        <div class="orders-table">
             <div class="table-header">
-                <div>ID</div>
-                <div>Tên diễn viên</div>
-                <div>Vai trò</div>
+                <div>Mã đơn</div>
+                <div>Khách hàng</div>
+                <div>Sản phẩm</div>
                 <div>Thông tin</div>
-                <div>Thời gian cập nhật</div>
+                <div>Trạng thái</div>
+                <div>Thời gian</div>
                 <div>Hành động</div>
             </div>
 
-            <!-- Artist 1 -->
+            <!-- Order 1 -->
             <div class="table-row">
-                <div>#1</div>
-                <div><strong>Joong Archer</strong></div>
-                <div>Diễn viên chính</div>
-                <div class="artist-info">
-                    <div class="artist-info-item"><strong>Ngày sinh:</strong> 10/03/2001</div>
-                    <div class="artist-info-item"><strong>Chiều cao:</strong> 186 cm</div>
-                    <div class="artist-info-item"><strong>Partner:</strong> Dunk Natachai</div>
-                    <div class="artist-info-item"><strong>Linh vật:</strong> Jadee</div>
+                <div><strong>#GMO001</strong></div>
+                <div>Nguyễn Văn A</div>
+                <div>Box JimmySea 1$ x2</div>
+                <div class="order-info">
+                    <div class="order-info-item"><strong>Giá:</strong> 100.000đ</div>
+                    <div class="order-info-item"><strong>Vận chuyển:</strong> 25.000đ</div>
+                    <div class="order-info-item"><strong>Tổng:</strong> 125.000đ</div>
                 </div>
+                <div><span class="status-badge status-delivered">✓ Đã giao</span></div>
                 <div class="time-updated">08/03/2026 14:30</div>
                 <div class="btn-group">
-                    <button class="btn-edit">Sửa</button>
+                    <button class="btn-view">Chi tiết</button>
                     <button class="btn-delete">Xóa</button>
                 </div>
             </div>
 
-            <!-- Artist 2 -->
+            <!-- Order 2 -->
             <div class="table-row">
-                <div>#2</div>
-                <div><strong>Boom Tharatorn</strong></div>
-                <div>Diễn viên chính</div>
-                <div class="artist-info">
-                    <div class="artist-info-item"><strong>Ngày sinh:</strong> 15/06/1999</div>
-                    <div class="artist-info-item"><strong>Chiều cao:</strong> 180 cm</div>
-                    <div class="artist-info-item"><strong>Partner:</strong> Aou Thanaboon</div>
-                    <div class="artist-info-item"><strong>Linh vật:</strong> Ceri </div>
+                <div><strong>#GMO002</strong></div>
+                <div>Trần Thị B</div>
+                <div>Card Clover 1$ x1, Túi sách 1$ x1</div>
+                <div class="order-info">
+                    <div class="order-info-item"><strong>Giá:</strong> 75.000đ</div>
+                    <div class="order-info-item"><strong>Vận chuyển:</strong> 25.000đ</div>
+                    <div class="order-info-item"><strong>Tổng:</strong> 100.000đ</div>
                 </div>
-                <div class="time-updated">05/03/2026 10:15</div>
+                <div><span class="status-badge status-shipped">🚚 Đang giao</span></div>
+                <div class="time-updated">06/03/2026 10:15</div>
                 <div class="btn-group">
-                    <button class="btn-edit">Sửa</button>
+                    <button class="btn-view">Chi tiết</button>
+                    <button class="btn-edit">Cập nhật</button>
                     <button class="btn-delete">Xóa</button>
                 </div>
             </div>
 
-            <!-- Artist 3 -->
+            <!-- Order 3 -->
             <div class="table-row">
-                <div>#3</div>
-                <div><strong>Aston Ratiphat</strong></div>
-                <div>Diễn viên chính</div>
-                <div class="artist-info">
-                    <div class="artist-info-item"><strong>Ngày sinh:</strong> 22/11/1998</div>
-                    <div class="artist-info-item"><strong>Chiều cao:</strong> 178 cm</div>
-                    <div class="artist-info-item"><strong>Partner:</strong> chokun </div>
-                    <div class="artist-info-item"><strong>Linh vật:</strong> -</div>
+                <div><strong>#GMO003</strong></div>
+                <div>Lê Văn C</div>
+                <div>Áo Phông Domiia 1$ x3</div>
+                <div class="order-info">
+                    <div class="order-info-item"><strong>Giá:</strong> 105.000đ</div>
+                    <div class="order-info-item"><strong>Vận chuyển:</strong> 25.000đ</div>
+                    <div class="order-info-item"><strong>Tổng:</strong> 130.000đ</div>
                 </div>
-                <div class="time-updated">01/03/2026 16:45</div>
+                <div><span class="status-badge status-processing">⚙ Đang xử lý</span></div>
+                <div class="time-updated">09/03/2026 09:45</div>
                 <div class="btn-group">
-                    <button class="btn-edit">Sửa</button>
+                    <button class="btn-view">Chi tiết</button>
+                    <button class="btn-edit">Cập nhật</button>
                     <button class="btn-delete">Xóa</button>
                 </div>
             </div>
 
-            <!-- Artist 4 -->
+            <!-- Order 4 -->
             <div class="table-row">
-                <div>#4</div>
-                <div><strong>Dunk Natachai</strong></div>
-                <div>Diễn viên chính</div>
-                <div class="artist-info">
-                    <div class="artist-info-item"><strong>Ngày sinh:</strong> 02/08/2000</div>
-                    <div class="artist-info-item"><strong>Chiều cao:</strong> 175 cm</div>
-                    <div class="artist-info-item"><strong>Partner:</strong> Joong Archer</div>
-                    <div class="artist-info-item"><strong>Linh vật:</strong> Jadee</div>
+                <div><strong>#GMO004</strong></div>
+                <div>Phạm Thị D</div>
+                <div>Box Yours Win Metawin 1$ x1</div>
+                <div class="order-info">
+                    <div class="order-info-item"><strong>Giá:</strong> 55.000đ</div>
+                    <div class="order-info-item"><strong>Vận chuyển:</strong> 25.000đ</div>
+                    <div class="order-info-item"><strong>Tổng:</strong> 80.000đ</div>
                 </div>
-                <div class="time-updated">07/03/2026 09:20</div>
+                <div><span class="status-badge status-pending">⏳ Chờ xác nhận</span></div>
+                <div class="time-updated">10/03/2026 11:20</div>
                 <div class="btn-group">
-                    <button class="btn-edit">Sửa</button>
+                    <button class="btn-view">Chi tiết</button>
+                    <button class="btn-edit">Cập nhật</button>
                     <button class="btn-delete">Xóa</button>
                 </div>
             </div>
 
-            <!-- Artist 5 -->
+            <!-- Order 5 -->
             <div class="table-row">
-                <div>#5</div>
-                <div><strong>Win Metawin</strong></div>
-                <div>Diễn viên chính</div>
-                <div class="artist-info">
-                    <div class="artist-info-item"><strong>Ngày sinh:</strong> 12/07/2000</div>
-                    <div class="artist-info-item"><strong>Chiều cao:</strong> 183 cm</div>
-                    <div class="artist-info-item"><strong>Partner:</strong> - </div>
-                    <div class="artist-info-item"><strong>Linh vật:</strong> -</div>
+                <div><strong>#GMO005</strong></div>
+                <div>Vũ Anh E</div>
+                <div>Quạt SeaKeen 1$ x2, Pin Any 1$ x1</div>
+                <div class="order-info">
+                    <div class="order-info-item"><strong>Giá:</strong> 65.000đ</div>
+                    <div class="order-info-item"><strong>Vận chuyển:</strong> 25.000đ</div>
+                    <div class="order-info-item"><strong>Tổng:</strong> 90.000đ</div>
                 </div>
-                <div class="time-updated">04/03/2026 13:50</div>
+                <div><span class="status-badge status-delivered">✓ Đã giao</span></div>
+                <div class="time-updated">05/03/2026 15:50</div>
                 <div class="btn-group">
-                    <button class="btn-edit">Sửa</button>
+                    <button class="btn-view">Chi tiết</button>
                     <button class="btn-delete">Xóa</button>
                 </div>
             </div>
 
-            <!-- Artist 6 -->
+            <!-- Order 6 -->
             <div class="table-row">
-                <div>#6</div>
-                <div><strong>Force Julakrit</strong></div>
-                <div>Diễn viên chính</div>
-                <div class="artist-info">
-                    <div class="artist-info-item"><strong>Ngày sinh:</strong> 25/04/2000</div>
-                    <div class="artist-info-item"><strong>Chiều cao:</strong> 179 cm</div>
-                    <div class="artist-info-item"><strong>Partner:</strong> Bookaside</div>
-                    <div class="artist-info-item"><strong>Linh vật:</strong> -</div>
+                <div><strong>#GMO006</strong></div>
+                <div>Hoàng Minh F</div>
+                <div>Móc khóa Permpoon 1$ x5</div>
+                <div class="order-info">
+                    <div class="order-info-item"><strong>Giá:</strong> 75.000đ</div>
+                    <div class="order-info-item"><strong>Vận chuyển:</strong> 25.000đ</div>
+                    <div class="order-info-item"><strong>Tổng:</strong> 100.000đ</div>
                 </div>
-                <div class="time-updated">03/03/2026 11:30</div>
+                <div><span class="status-badge status-cancelled">✗ Đã hủy</span></div>
+                <div class="time-updated">02/03/2026 08:30</div>
                 <div class="btn-group">
-                    <button class="btn-edit">Sửa</button>
+                    <button class="btn-view">Chi tiết</button>
                     <button class="btn-delete">Xóa</button>
                 </div>
             </div>
@@ -475,22 +526,25 @@
             window.location.href = "dashboard.html";
         }
 
-        // Add button
-        document.querySelector('.add-button').addEventListener('click', () => {
-            alert('Chức năng thêm diễn viên mới sắp ra mắt!');
-        });
-
-        // Edit buttons
-        document.querySelectorAll('.btn-edit').forEach(btn => {
+        // View detail button
+        document.querySelectorAll('.btn-view').forEach(btn => {
             btn.addEventListener('click', () => {
-                alert('Chức năng chỉnh sửa sắp ra mắt!');
+                const orderId = btn.parentElement.parentElement.querySelector('strong').textContent;
+                alert(`Chi tiết đơn hàng: ${orderId}`);
             });
         });
 
-        // Delete buttons
+        // Edit/Update button
+        document.querySelectorAll('.btn-edit').forEach(btn => {
+            btn.addEventListener('click', () => {
+                alert('Chức năng cập nhật trạng thái sắp ra mắt!');
+            });
+        });
+
+        // Delete button
         document.querySelectorAll('.btn-delete').forEach(btn => {
             btn.addEventListener('click', () => {
-                if (confirm('Bạn có chắc chắn muốn xóa?')) {
+                if (confirm('Bạn có chắc chắn muốn xóa đơn hàng này?')) {
                     btn.parentElement.parentElement.remove();
                 }
             });

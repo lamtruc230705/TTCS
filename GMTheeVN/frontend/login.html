@@ -144,6 +144,28 @@
             object-fit: cover;
             transform: rotate(180deg); 
         }
+
+        .auth-message {
+            display: none;
+            margin-top: 16px;
+            padding: 12px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .auth-message.success {
+            display: block;
+            background: rgba(39, 174, 96, 0.15);
+            color: #146c43;
+        }
+
+        .auth-message.error {
+            display: block;
+            background: rgba(231, 76, 60, 0.15);
+            color: #b02a37;
+    }
     </style>
 </head>
 <body>
@@ -162,7 +184,7 @@
         </div>
 
         <!-- Form -->
-        <form>
+        <form id="loginForm">
             <div class="form-group">
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" placeholder="Nhập email của bạn" required>
@@ -173,11 +195,65 @@
                 <input type="password" id="password" name="password" placeholder="Nhập mật khẩu" required>
             </div>
 
-            <button type="submit" class="btn-login">Đăng nhập</button>
+            <button type="submit" class="btn-login" id="loginButton">Đăng nhập</button>
+            <div id="loginMessage" class="auth-message" aria-live="polite"></div>
         </form>
     </div>
 
    <img src="./images/hoavan.png" class="decoration decoration-top" alt="Hoa văn">
    <img src="./images/hoavan.png" class="decoration decoration-bottom" alt="Hoa văn">
+
+   <script src="./app.js"></script>
+   <script>
+    function getHomeByRole(role) {
+        switch (role) {
+            case 'admin':
+                return './admin/dashboard.html';
+            case 'artist':
+                return './artists/dashboard.html';
+            case 'user':
+            default:
+                return './User/index.html';
+        }
+    }
+
+    function showLoginMessage(message, type = 'error') {
+        const messageBox = document.getElementById('loginMessage');
+        messageBox.textContent = message;
+        messageBox.className = `auth-message ${type}`;
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const button = document.getElementById('loginButton');
+
+        if (!email || !password) {
+            showLoginMessage('Vui lòng nhập đầy đủ email và mật khẩu.');
+            return;
+        }
+
+        try {
+            button.disabled = true;
+            button.textContent = 'Đang đăng nhập...';
+
+            const response = await APIClient.login({ email, password });
+            const user = response?.data?.user || APIClient.getCurrentUser();
+
+            showLoginMessage('Đăng nhập thành công! Đang chuyển trang...', 'success');
+
+            setTimeout(() => {
+                window.location.href = getHomeByRole(user?.role);
+            }, 500);
+        } catch (error) {
+            showLoginMessage(error.message || 'Đăng nhập thất bại. Vui lòng thử lại.');
+        } finally {
+            button.disabled = false;
+            button.textContent = 'Đăng nhập';
+        }
+    });
+    </script>
 </body>
 </html>

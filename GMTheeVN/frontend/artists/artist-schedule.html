@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý cửa hàng - GMTheeVN</title>
+    <title>Lịch trình - GMTheeVN</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
@@ -70,13 +70,6 @@
             color: #0052cc;
         }
 
-        nav a.active {
-            color: #0052cc;
-            font-weight: 900;
-            border-bottom: 3px solid #0052cc;
-            padding-bottom: 5px;
-        }
-
         .user-section {
            display: flex;
            flex-direction: column;
@@ -119,9 +112,9 @@
 
         /* ===== MAIN CONTENT ===== */
         .container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 30px 20px;
+            padding: 40px 20px;
         }
 
         .page-title {
@@ -131,24 +124,19 @@
             margin-bottom: 30px;
         }
 
-        .controls {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
         .back-button {
             background: white;
             color: #0052cc;
             border: 2px solid #0052cc;
-            padding: 12px 30px;
+            padding: 10px 20px;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 700;
             font-family: 'Maven Pro', sans-serif;
             font-size: 14px;
             transition: all 0.3s ease;
-            text-decoration: none;
+            margin-bottom: 20px;
+            display: inline-block;
         }
 
         .back-button:hover {
@@ -156,28 +144,8 @@
             color: white;
         }
 
-        .add-button {
-            background: linear-gradient(135deg, #5555ff 0%, #4444dd 100%);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 700;
-            font-family: 'Maven Pro', sans-serif;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            margin-left: auto;
-        }
-
-        .add-button:hover {
-            background: linear-gradient(135deg, #6666ff 0%, #5555ee 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(85, 85, 255, 0.3);
-        }
-
-        /* ===== TABLE ===== */
-        .shops-table {
+        /* ===== SCHEDULE TABLE ===== */
+        .schedule-table {
             width: 100%;
             background: white;
             border-radius: 15px;
@@ -189,7 +157,7 @@
             background: rgba(255, 180, 150, 0.3);
             padding: 20px;
             display: grid;
-            grid-template-columns: 1fr 2fr 2fr 2fr 1.5fr;
+            grid-template-columns: 1.2fr 2fr 1.5fr 1.5fr 1.5fr;
             gap: 15px;
             font-weight: 700;
             border-bottom: 2px solid #f0f0f0;
@@ -198,7 +166,7 @@
         .table-row {
             padding: 20px;
             display: grid;
-            grid-template-columns: 1fr 2fr 2fr 2fr 1.5fr;
+            grid-template-columns: 1.2fr 2fr 1.5fr 1.5fr 1.5fr;
             gap: 15px;
             align-items: center;
             border-bottom: 1px solid #f0f0f0;
@@ -213,12 +181,36 @@
             border-bottom: none;
         }
 
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .status-upcoming {
+            background: #cfe2ff;
+            color: #084298;
+        }
+
+        .status-ongoing {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-completed {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
         .btn-group {
             display: flex;
             gap: 8px;
         }
 
-        .btn-edit, .btn-delete {
+        .btn-edit, .btn-cancel {
             padding: 8px 15px;
             border: none;
             border-radius: 6px;
@@ -239,17 +231,25 @@
             transform: translateY(-2px);
         }
 
-        .btn-delete {
+        .btn-cancel {
             background: #ff6b6b;
             color: white;
         }
 
-        .btn-delete:hover {
+        .btn-cancel:hover {
             background: #ff5252;
             transform: translateY(-2px);
         }
 
         /* ===== RESPONSIVE ===== */
+        @media (max-width: 1000px) {
+            .table-header,
+            .table-row {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+        }
+
         @media (max-width: 768px) {
             header {
                 flex-direction: column;
@@ -266,22 +266,16 @@
                 margin-left: 0;
             }
 
-            .controls {
+            .page-title {
+                font-size: 20px;
+            }
+
+            .btn-group {
                 flex-direction: column;
             }
 
-            .add-button {
-                margin-left: 0;
-            }
-
-            .table-header,
-            .table-row {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
-
-            .page-title {
-                font-size: 20px;
+            .btn-edit, .btn-cancel {
+                width: 100%;
             }
         }
     </style>
@@ -289,80 +283,78 @@
 <body>
     <!-- ===== HEADER ===== -->
     <header>
-        <a href="index.html" class="logo">GMTheeVN</a>
+        <a href="../home.html" class="logo">GMTheeVN</a>
         <nav>
-            <a href="index.html">Trang chủ</a>
-            <a href="dashboard.html">Quản lý</a>
+            <a href="../home.html">Trang chủ</a>
+            <a href="artist_dashboard.html">Bảng điều khiển</a>
         </nav>
         <div class="user-section">
             <div class="user-info">
-                <span>Admin</span>
+                <span>Joong Archer</span>
                 <div class="user-icon">👤</div>
             </div>
             <a href="../login.html" class="logout-link" onclick="localStorage.removeItem('token'); localStorage.removeItem('user');">Đăng xuất</a>
         </div>
     </header>
 
-
     <!-- ===== MAIN CONTENT ===== -->
     <div class="container">
-        <h1 class="page-title">🏪 Quản lý cửa hàng</h1>
+        <button class="back-button" onclick="goBack()">← Quay lại</button>
+        <h1 class="page-title">📅 Lịch trình</h1>
 
-        <div class="controls">
-            <a href="dashboard.html" class="back-button">← Quay lại</a>
-            <button class="add-button">➕ Thêm sản phẩm mới</button>
-        </div>
-
-        <div class="shops-table">
+        <div class="schedule-table">
             <div class="table-header">
-                <div>ID</div>
-                <div>Tên sản phẩm</div>
-                <div>Giá</div>
-                <div>Số lượng</div>
+                <div>Ngày</div>
+                <div>Sự kiện</div>
+                <div>Thời gian</div>
+                <div>Trạng thái</div>
                 <div>Hành động</div>
             </div>
 
+            <!-- Schedule 1 -->
             <div class="table-row">
-                <div>#1</div>
-                <div>Box JimmySea </div>
-                <div>1đ</div>
-                <div>25</div>
+                <div><strong>12/03/2026</strong></div>
+                <div>Quay phim "Dare You To Death"</div>
+                <div>09:00 - 17:00</div>
+                <div><span class="status-badge status-upcoming">Sắp tới</span></div>
                 <div class="btn-group">
                     <button class="btn-edit">Sửa</button>
-                    <button class="btn-delete">Xóa</button>
+                    <button class="btn-cancel">Hủy</button>
                 </div>
             </div>
 
+            <!-- Schedule 2 -->
             <div class="table-row">
-                <div>#2</div>
-                <div>Card Clover </div>
-                <div>1đ</div>
-                <div>50</div>
+                <div><strong>15/03/2026</strong></div>
+                <div>Tham dự lễ trao giải</div>
+                <div>19:00 - 22:00</div>
+                <div><span class="status-badge status-upcoming">Sắp tới</span></div>
                 <div class="btn-group">
                     <button class="btn-edit">Sửa</button>
-                    <button class="btn-delete">Xóa</button>
+                    <button class="btn-cancel">Hủy</button>
                 </div>
             </div>
 
+            <!-- Schedule 3 -->
             <div class="table-row">
-                <div>#3</div>
-                <div>Túi sách GMTheeVN </div>
-                <div>1đ</div>
-                <div>30</div>
+                <div><strong>18/03/2026</strong></div>
+                <div>Phỏng vấn truyền hình</div>
+                <div>14:00 - 15:30</div>
+                <div><span class="status-badge status-upcoming">Sắp tới</span></div>
                 <div class="btn-group">
                     <button class="btn-edit">Sửa</button>
-                    <button class="btn-delete">Xóa</button>
+                    <button class="btn-cancel">Hủy</button>
                 </div>
             </div>
 
+            <!-- Schedule 4 -->
             <div class="table-row">
-                <div>#4</div>
-                <div>Áo Phông Domiia </div>
-                <div>1đ</div>
-                <div>40</div>
+                <div><strong>05/03/2026</strong></div>
+                <div>Buổi chụp hình quảng cáo</div>
+                <div>10:00 - 13:00</div>
+                <div><span class="status-badge status-completed">Hoàn thành</span></div>
                 <div class="btn-group">
-                    <button class="btn-edit">Sửa</button>
-                    <button class="btn-delete">Xóa</button>
+                    <button class="btn-edit">Xem</button>
                 </div>
             </div>
         </div>
@@ -372,27 +364,6 @@
         function goBack() {
             window.location.href = "dashboard.html";
         }
-        
-        // Add button
-        document.querySelector('.add-button').addEventListener('click', () => {
-            alert('Chức năng thêm sản phẩm mới sắp ra mắt!');
-        });
-
-        // Edit buttons
-        document.querySelectorAll('.btn-edit').forEach(btn => {
-            btn.addEventListener('click', () => {
-                alert('Chức năng chỉnh sửa sắp ra mắt!');
-            });
-        });
-
-        // Delete buttons
-        document.querySelectorAll('.btn-delete').forEach(btn => {
-            btn.addEventListener('click', () => {
-                if (confirm('Bạn có chắc chắn muốn xóa?')) {
-                    btn.parentElement.parentElement.remove();
-                }
-            });
-        });
     </script>
 </body>
 </html>
