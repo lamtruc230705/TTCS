@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý người dùng - GMTheeVN</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Maven Pro', sans-serif;
+            background: linear-gradient(135deg, #a8e6f8 0%, #b3f0ff 100%);
+            min-height: 100vh;
+        }
+
+        /* ===== HEADER ===== */
+        header {
+            background: linear-gradient(135deg, #a8e6f8 0%, #b3f0ff 100%);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 40px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-bottom: 3px solid rgba(0, 82, 204, 0.3);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+            color: #0052cc;
+            text-decoration: none;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            flex: 1;
+        }
+
+        nav a {
+            color: #000;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #0052cc;
+        }
+
+        nav a.active {
+            color: #0052cc;
+            font-weight: 900;
+            border-bottom: 3px solid #0052cc;
+            padding-bottom: 5px;
+        }
+
+       .user-section {
+           display: flex;
+           flex-direction: column;
+           align-items: center;
+           gap: 4px;
+           font-weight: 600;
+           color: #000;
+           margin-left: auto;
+        }
+
+        .user-info {
+           display: flex;
+           align-items: center;
+           gap: 10px;
+        }
+        .user-icon {
+            width: 35px;
+            height: 35px;
+            background: #0052cc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+        .logout-link {
+            color: #ff5252;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1;
+            transition: all 0.3s ease;
+        }
+
+        .logout-link:hover {
+            color: #d93636;
+            text-decoration: underline;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 900;
+            color: #000;
+            margin-bottom: 30px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .back-button {
+            background: white;
+            color: #0052cc;
+            border: 2px solid #0052cc;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-family: 'Maven Pro', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            background: #0052cc;
+            color: white;
+        }
+
+        .add-button {
+            background: linear-gradient(135deg, #5555ff 0%, #4444dd 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-family: 'Maven Pro', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            margin-left: auto;
+        }
+
+        .add-button:hover {
+            background: linear-gradient(135deg, #6666ff 0%, #5555ee 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(85, 85, 255, 0.3);
+        }
+
+        /* ===== TABLE ===== */
+        .users-table {
+            width: 100%;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-header {
+            background: rgba(255, 180, 150, 0.3);
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 0.7fr 2fr 2.2fr 1.5fr 1.4fr 1.2fr;
+            gap: 15px;
+            font-weight: 700;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .table-row {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 0.7fr 2fr 2.2fr 1.5fr 1.4fr 1.2fr;
+            gap: 15px;
+            align-items: center;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+        }
+        .table-row:hover {
+            background: rgba(255, 180, 150, 0.1);
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-edit, .btn-delete {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Maven Pro', sans-serif;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit {
+            background: #5555ff;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #4444dd;
+            transform: translateY(-2px);
+        }
+
+        .btn-delete {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+        }
+
+        .role-select {
+            width: 100%;
+            padding: 8px 10px;
+            border: 2px solid #d8eef8;
+            border-radius: 8px;
+            font-family: 'Maven Pro', sans-serif;
+            font-weight: 700;
+            outline: none;
+            background: white;
+        }
+
+        .loading-message,
+        .empty-message,
+        .error-message {
+            padding: 25px;
+            font-weight: 700;
+        }
+
+        .error-message {
+            color: #d63031;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 15px;
+                width: 100%;
+            }
+
+            .user-section {
+                margin-left: 0;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .add-button {
+                margin-left: 0;
+            }
+
+            .table-header,
+            .table-row {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .page-title {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== HEADER ===== -->
+    <header>
+        <a href="index.html" class="logo">GMTheeVN</a>
+        <nav>
+            <a href="index.html">Trang chủ</a>
+            <a href="dashboard.html">Quản lý</a>
+        </nav>
+        <div class="user-section">
+            <div class="user-info">
+                <span>Admin</span>
+                <div class="user-icon">👤</div>
+            </div>
+            <a href="../login.html" class="logout-link" onclick="localStorage.removeItem('token'); localStorage.removeItem('user');">Đăng xuất</a>
+        </div>
+    </header>
+
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="container">
+        <h1 class="page-title">👥 Quản lý người dùng</h1>
+
+        <div class="controls">
+            <a href="dashboard.html" class="back-button">← Quay lại</a>
+            <a href="admin_add_users.html" class="add-button" style="text-decoration: none;">
+                ➕ Thêm người dùng mới
+            </a>
+        </div>
+
+       <div class="users-table">
+            <div class="table-header">
+                <div>ID</div>
+                <div>Tên người dùng</div>
+                <div>Email</div>
+                <div>Số điện thoại</div>
+                <div>Vai trò</div>
+                <div>Thao tác</div>
+            </div>
+
+            <div id="usersTableBody">
+                <div class="loading-message">Đang tải danh sách tài khoản...</div>
+            </div>
+        </div>
+    </div>
+
+
+   <script src="../app.js"></script>
+    <script>
+        function escapeHTML(value) {
+            return String(value ?? '').replace(/[&<>"']/g, function(char) {
+                return {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#039;'
+                }[char];
+            });
+        }
+
+        function getRoleLabel(role) {
+            if (role === 'admin') return 'Admin';
+            if (role === 'artist') return 'Artist';
+            return 'User';
+        }
+
+        function requireAdmin() {
+            if (!APIClient.isLoggedIn()) {
+                alert('Bạn cần đăng nhập bằng tài khoản admin.');
+                window.location.href = '../login.html';
+                return false;
+            }
+
+            if (APIClient.getRole() !== 'admin') {
+                alert('Bạn không có quyền truy cập trang này.');
+                window.location.href = '../login.html';
+                return false;
+            }
+
+            return true;
+        }
+
+        async function loadUsers() {
+            if (!requireAdmin()) return;
+
+            const body = document.getElementById('usersTableBody');
+            body.innerHTML = '<div class="loading-message">Đang tải danh sách tài khoản...</div>';
+
+            try {
+                const response = await APIClient.getAdminUsers();
+                const users = response?.data || [];
+                renderUsers(users);
+            } catch (error) {
+                console.error(error);
+                body.innerHTML = `
+                    <div class="error-message">
+                        Không tải được danh sách tài khoản: ${escapeHTML(error.message || 'Lỗi không xác định')}
+                    </div>
+                `;
+            }
+        }
+
+        function renderUsers(users) {
+            const body = document.getElementById('usersTableBody');
+
+            if (!Array.isArray(users) || users.length === 0) {
+                body.innerHTML = '<div class="empty-message">Chưa có tài khoản nào trong database.</div>';
+                return;
+            }
+
+            body.innerHTML = users.map(user => `
+                <div class="table-row" data-user-id="${user.id}">
+                    <div>#${user.id}</div>
+
+                    <div>
+                        ${escapeHTML(user.full_name || user.username)}
+                        <br>
+                        <small>@${escapeHTML(user.username)}</small>
+                    </div>
+
+                    <div>${escapeHTML(user.email)}</div>
+                    <div>${escapeHTML(user.phone || 'Chưa cập nhật')}</div>
+
+                    <div>
+                        <select class="role-select" data-user-id="${user.id}">
+                            <option value="user" ${user.role === 'user' ? 'selected' : ''}>User</option>
+                            <option value="artist" ${user.role === 'artist' ? 'selected' : ''}>Artist</option>
+                            <option value="admin" ${user.role === 'admin' ? 'selected' : ''}>Admin</option>
+                        </select>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn-delete" data-user-id="${user.id}">
+                            Xóa
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            document.querySelectorAll('.role-select').forEach(select => {
+                select.addEventListener('change', handleRoleChange);
+            });
+
+            document.querySelectorAll('.btn-delete').forEach(button => {
+                button.addEventListener('click', handleDeleteUser);
+            });
+        }
+
+        async function handleRoleChange(event) {
+            const select = event.target;
+            const userId = select.dataset.userId;
+            const newRole = select.value;
+            const oldRole = select.getAttribute('data-old-role') || '';
+
+            const ok = confirm(`Bạn có muốn đổi vai trò tài khoản #${userId} thành ${getRoleLabel(newRole)} không?`);
+
+            if (!ok) {
+                if (oldRole) select.value = oldRole;
+                return;
+            }
+
+            try {
+                select.disabled = true;
+
+                await APIClient.updateAdminUserRole(userId, newRole);
+
+                select.setAttribute('data-old-role', newRole);
+                alert('Cập nhật vai trò thành công.');
+                await loadUsers();
+            } catch (error) {
+                console.error(error);
+                alert(error.message || 'Không cập nhật được vai trò.');
+                await loadUsers();
+            } finally {
+                select.disabled = false;
+            }
+        }
+
+        async function handleDeleteUser(event) {
+            const userId = event.target.dataset.userId;
+
+            const ok = confirm(`Bạn có chắc chắn muốn xóa tài khoản #${userId} không?`);
+            if (!ok) return;
+
+            try {
+                await APIClient.deleteAdminUser(userId);
+                alert('Xóa tài khoản thành công.');
+                await loadUsers();
+            } catch (error) {
+                console.error(error);
+                alert(error.message || 'Không xóa được tài khoản.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadUsers);
+    </script>
+</body>
+</html>

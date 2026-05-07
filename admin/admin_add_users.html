@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thêm người dùng - GMTheeVN</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Maven Pro', sans-serif;
+            background: linear-gradient(135deg, #a8e6f8 0%, #b3f0ff 100%);
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, #a8e6f8 0%, #b3f0ff 100%);
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-bottom: 3px solid rgba(0, 82, 204, 0.3);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 900;
+            color: #0052cc;
+            text-decoration: none;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+            flex: 1;
+        }
+
+        nav a {
+            color: #000;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        .user-icon {
+            width: 35px;
+            height: 35px;
+            background: #0052cc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .container {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 35px 20px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 900;
+            margin-bottom: 24px;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 18px;
+            padding: 28px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-weight: 800;
+            margin-bottom: 7px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 13px 14px;
+            border: 2px solid #d8eef8;
+            border-radius: 10px;
+            font-family: 'Maven Pro', sans-serif;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #0052cc;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            border: none;
+            border-radius: 10px;
+            padding: 13px 20px;
+            font-family: 'Maven Pro', sans-serif;
+            font-weight: 900;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #0052cc;
+            color: white;
+            flex: 1;
+        }
+
+        .btn-secondary {
+            background: #eeeeee;
+            color: #333;
+        }
+
+        .message {
+            display: none;
+            margin-top: 16px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        .message.success {
+            display: block;
+            background: rgba(39, 174, 96, 0.15);
+            color: #146c43;
+        }
+
+        .message.error {
+            display: block;
+            background: rgba(231, 76, 60, 0.15);
+            color: #b02a37;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">GMTheeVN</a>
+
+        <nav>
+            <a href="index.html">Trang chủ</a>
+            <a href="dashboard.html">Quản lý</a>
+        </nav>
+
+        <div class="user-section">
+            <span>Admin</span>
+            <div class="user-icon">👤</div>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1 class="page-title">➕ Thêm tài khoản mới</h1>
+
+        <form class="form-card" id="createUserForm">
+            <div class="form-group">
+                <label for="username">Tên đăng nhập</label>
+                <input type="text" id="username" required minlength="3" placeholder="Ví dụ: user2">
+            </div>
+
+            <div class="form-group">
+                <label for="fullName">Họ tên</label>
+                <input type="text" id="fullName" placeholder="Ví dụ: Nguyễn Văn B">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" required placeholder="Ví dụ: user2@gmail.com">
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Số điện thoại</label>
+                <input type="text" id="phone" placeholder="Ví dụ: 0912345678">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Mật khẩu</label>
+                <input type="password" id="password" required minlength="6" placeholder="Tối thiểu 6 ký tự">
+            </div>
+
+            <div class="form-group">
+                <label for="role">Vai trò</label>
+                <select id="role">
+                    <option value="user">User</option>
+                    <option value="artist">Artist</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+
+            <div id="formMessage" class="message"></div>
+
+            <div class="actions">
+                <a href="admin-users.html" class="btn-secondary">← Quay lại</a>
+                <button type="submit" class="btn-primary" id="submitButton">
+                    Tạo tài khoản
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script src="../app.js"></script>
+    <script>
+        function showMessage(message, type = 'error') {
+            const box = document.getElementById('formMessage');
+            box.textContent = message;
+            box.className = `message ${type}`;
+        }
+
+        function requireAdmin() {
+            if (!APIClient.isLoggedIn()) {
+                alert('Bạn cần đăng nhập bằng tài khoản admin.');
+                window.location.href = '../login.html';
+                return false;
+            }
+
+            if (APIClient.getRole() !== 'admin') {
+                alert('Bạn không có quyền truy cập trang này.');
+                window.location.href = '../login.html';
+                return false;
+            }
+
+            return true;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!requireAdmin()) return;
+
+            document.getElementById('createUserForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const button = document.getElementById('submitButton');
+
+                const payload = {
+                    username: document.getElementById('username').value.trim(),
+                    full_name: document.getElementById('fullName').value.trim(),
+                    email: document.getElementById('email').value.trim(),
+                    phone: document.getElementById('phone').value.trim(),
+                    password: document.getElementById('password').value,
+                    role: document.getElementById('role').value,
+                    status: 'active'
+                };
+
+                if (!payload.username || !payload.email || !payload.password) {
+                    showMessage('Vui lòng nhập tên đăng nhập, email và mật khẩu.');
+                    return;
+                }
+
+                if (payload.password.length < 6) {
+                    showMessage('Mật khẩu phải có ít nhất 6 ký tự.');
+                    return;
+                }
+
+                try {
+                    button.disabled = true;
+                    button.textContent = 'Đang tạo...';
+
+                    await APIClient.createAdminUser(payload);
+
+                    showMessage('Tạo tài khoản thành công. Đang quay lại danh sách...', 'success');
+
+                    setTimeout(() => {
+                        window.location.href = 'admin-users.html';
+                    }, 800);
+                } catch (error) {
+                    console.error(error);
+                    showMessage(error.message || 'Không tạo được tài khoản.');
+                } finally {
+                    button.disabled = false;
+                    button.textContent = 'Tạo tài khoản';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
