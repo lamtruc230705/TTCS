@@ -214,7 +214,7 @@
         </nav>
         <div class="user-section">
             <div class="user-info">
-                <span>Admin</span>
+                <span id="adminName">Admin</span>
                 <div class="user-icon">👤</div>
             </div>
             <a href="../login.html" class="logout-link" onclick="localStorage.removeItem('token'); localStorage.removeItem('user');">Đăng xuất</a>
@@ -225,9 +225,10 @@
     <!-- ===== MAIN CONTENT ===== -->
     <div class="container">
         <div class="admin-menu">
-            <div style="text-align: center; margin-bottom: 40px;">
+            <div style="text-align: center; margin-bottom: 20px;">
                 <h1 style="font-size: 40px; color: #000; margin-bottom: 10px;">Quản lý</h1>
             </div>
+            <div id="adminStats" style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:20px;"></div>
 
             <a href="admin-users.html" class="menu-item">
                 👥 Quản lý người dùng
@@ -247,5 +248,31 @@
 
         </div>
     </div>
+    <script src="../app.js"></script>
+    <script>
+        function formatVND(v){return Number(v||0).toLocaleString('vi-VN')+'đ';}
+        function statCard(label, value){return `<div style="background:#fff;padding:10px 14px;border-radius:10px;min-width:180px;box-shadow:0 2px 8px rgba(0,0,0,.08)"><div style="font-size:12px;color:#666">${label}</div><div style="font-size:20px;font-weight:800">${value}</div></div>`}
+        async function loadAdminDashboard(){
+            const user=APIClient.getCurrentUser();
+            if(user) document.getElementById('adminName').textContent = user.full_name || user.username || 'Admin';
+            try{
+                const [users, products, artists, orders] = await Promise.all([
+                    APIClient.getAdminUsers(),
+                    APIClient.getAdminProducts(),
+                    APIClient.getAdminArtists(),
+                    APIClient.getAdminOrders()
+                ]);
+                const stats = document.getElementById('adminStats');
+                stats.innerHTML = [
+                    statCard('Người dùng', (users?.data||[]).length),
+                    statCard('Sản phẩm', (products?.data||[]).length),
+                    statCard('Nghệ sĩ', (artists?.data||[]).length),
+                    statCard('Đơn hàng', (orders?.data||[]).length),
+                    statCard('Tổng doanh thu', formatVND((orders?.data||[]).reduce((s,o)=>s+Number(o.total_amount||0),0)))
+                ].join('');
+            }catch(e){console.error(e);}
+        }
+        document.addEventListener('DOMContentLoaded', loadAdminDashboard);
+    </script>
 </body>
 </html>

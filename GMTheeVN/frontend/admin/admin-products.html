@@ -322,77 +322,58 @@
                 <div>Hành động</div>
             </div>
 
-            <div class="table-row">
-                <div>#1</div>
-                <div>Box JimmySea </div>
-                <div>1đ</div>
-                <div>25</div>
-                <div class="btn-group">
-                    <button class="btn-edit">Sửa</button>
-                    <button class="btn-delete">Xóa</button>
-                </div>
-            </div>
-
-            <div class="table-row">
-                <div>#2</div>
-                <div>Card Clover </div>
-                <div>1đ</div>
-                <div>50</div>
-                <div class="btn-group">
-                    <button class="btn-edit">Sửa</button>
-                    <button class="btn-delete">Xóa</button>
-                </div>
-            </div>
-
-            <div class="table-row">
-                <div>#3</div>
-                <div>Túi sách GMTheeVN </div>
-                <div>1đ</div>
-                <div>30</div>
-                <div class="btn-group">
-                    <button class="btn-edit">Sửa</button>
-                    <button class="btn-delete">Xóa</button>
-                </div>
-            </div>
-
-            <div class="table-row">
-                <div>#4</div>
-                <div>Áo Phông Domiia </div>
-                <div>1đ</div>
-                <div>40</div>
-                <div class="btn-group">
-                    <button class="btn-edit">Sửa</button>
-                    <button class="btn-delete">Xóa</button>
-                </div>
+            <div id="productRows">
+                <div class="table-row"><div colspan="5">Đang tải dữ liệu sản phẩm...</div></div>
             </div>
         </div>
     </div>
 
+    <script src="../app.js"></script>
     <script>
-        function goBack() {
-            window.location.href = "dashboard.html";
+        const formatVND = (v) => Number(v || 0).toLocaleString('vi-VN') + 'đ';
+
+        function renderProducts(products) {
+            const rows = document.getElementById('productRows');
+            if (!Array.isArray(products) || products.length === 0) {
+                rows.innerHTML = '<div class="table-row"><div>--</div><div>Chưa có sản phẩm</div><div>0đ</div><div>0</div><div>-</div></div>';
+                return;
+            }
+            rows.innerHTML = products.map((p) => `
+                <div class="table-row">
+                    <div>#${Number(p.id)}</div>
+                    <div>${p.name || 'Sản phẩm'}</div>
+                    <div>${formatVND(p.price)}</div>
+                    <div>${Number(p.stock || 0)}</div>
+                    <div class="btn-group">
+                        <button class="btn-edit" data-id="${Number(p.id)}">Sửa</button>
+                        <button class="btn-delete" data-id="${Number(p.id)}">Xóa</button>
+                    </div>
+                </div>
+            `).join('');
         }
-        
-        // Add button
+
+        async function loadProducts() {
+            const response = await APIClient.getAdminProducts();
+            renderProducts(response?.data || []);
+        }
+
         document.querySelector('.add-button').addEventListener('click', () => {
-            alert('Chức năng thêm sản phẩm mới sắp ra mắt!');
+            window.location.href='admin-add-product.html';
         });
 
-        // Edit buttons
-        document.querySelectorAll('.btn-edit').forEach(btn => {
-            btn.addEventListener('click', () => {
-                alert('Chức năng chỉnh sửa sắp ra mắt!');
-            });
+        document.addEventListener('click', async (e) => {
+            if (e.target.classList.contains('btn-edit')) {
+                window.location.href='admin-edit-product.html?id='+e.target.dataset.id;
+            }
+            if (e.target.classList.contains('btn-delete')) {
+                const id = e.target.dataset.id;
+                if (!confirm('Bạn có chắc chắn muốn xóa?')) return;
+                await APIClient.deleteAdminProduct(id);
+                await loadProducts();
+            }
         });
 
-        // Delete buttons
-        document.querySelectorAll('.btn-delete').forEach(btn => {
-            btn.addEventListener('click', () => {
-                if (confirm('Bạn có chắc chắn muốn xóa?')) {
-                    btn.parentElement.parentElement.remove();
-                }
-            });
-        });
+        document.addEventListener('DOMContentLoaded', loadProducts);
     </script>
 </body>
 </html>

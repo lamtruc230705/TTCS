@@ -452,7 +452,7 @@
         </nav>
         <div class="user-section">
             <div class="user-info">
-                <span>Joong Archer</span>
+                <span>Nghệ sĩ</span>
                 <div class="user-icon">👤</div>
             </div>
             <a href="../login.html" class="logout-link" onclick="localStorage.removeItem('token'); localStorage.removeItem('user');">Đăng xuất</a>
@@ -467,20 +467,20 @@
         <div class="stats-section">
             <div class="stat-card">
                 <div class="stat-label">Tổng sản phẩm</div>
-                <div class="stat-number">12</div>
-                <div class="stat-change">↑ 2 sản phẩm mới</div>
+                <div class="stat-number" id="totalProducts">0</div>
+                <div class="stat-change">Sản phẩm đang hoạt động</div>
             </div>
 
             <div class="stat-card">
                 <div class="stat-label">Bán được</div>
-                <div class="stat-number">245</div>
-                <div class="stat-change">Tháng này</div>
+                <div class="stat-number" id="totalStock">0</div>
+                <div class="stat-change">Tổng tồn kho</div>
             </div>
 
             <div class="stat-card">
                 <div class="stat-label">Doanh thu</div>
-                <div class="stat-number">12.3M</div>
-                <div class="stat-change">↑ 25% so với tháng trước</div>
+                <div class="stat-number" id="totalValue">0đ</div>
+                <div class="stat-change">Tổng giá trị hàng hóa</div>
             </div>
         </div>
 
@@ -494,95 +494,14 @@
         </div>
 
        <!-- Shop Grid -->
-        <div class="shop-grid" id="shopGrid">
-            <!-- Product 4 -->
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="../images/cart/ao1.webp" alt="Áo Phông">
-                </div>
-                <div class="product-name">Áo Phông Domiia </div>
-                <div class="product-info">
-                    <span>Áo thun nam cao cấp</span>
-                </div>
-                <div class="product-price">1đ</div>
-                <div class="stock-info">📦 Còn: 40 cái</div>
-                <div class="card-buttons">
-                    <button class="btn-edit" onclick="editProduct(4)">Sửa</button>
-                    <button class="btn-delete" onclick="deleteProduct(4)">Xóa</button>
-                </div>
-            </div>
-
-            <!-- Product 5 -->
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="../images/cart/box2.webp" alt="Box Yours">
-                </div>
-                <div class="product-name">Box Yours Win Metawin </div>
-                <div class="product-info">
-                    <span>Hộp quà tặng đặc biệt</span>
-                </div>
-                <div class="product-price">1đ</div>
-                <div class="stock-info">📦 Còn: 15 cái</div>
-                <div class="card-buttons">
-                    <button class="btn-edit" onclick="editProduct(5)">Sửa</button>
-                    <button class="btn-delete" onclick="deleteProduct(5)">Xóa</button>
-                </div>
-            </div>
-
-            <!-- Product 6 -->
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="../images/cart/Fan1.webp" alt="Quạt">
-                </div>
-                <div class="product-name">Quạt SeaKeen </div>
-                <div class="product-info">
-                    <span>Quạt cầm tay tiện lợi</span>
-                </div>
-                <div class="product-price">1đ</div>
-                <div class="stock-info">📦 Còn: 60 cái</div>
-                <div class="card-buttons">
-                    <button class="btn-edit" onclick="editProduct(6)">Sửa</button>
-                    <button class="btn-delete" onclick="deleteProduct(6)">Xóa</button>
-                </div>
-            </div>
-
-            <!-- Product 7 -->
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="../images/cart/pin1.webp" alt="Pin">
-                </div>
-                <div class="product-name">Pin Any </div>
-                <div class="product-info">
-                    <span>Pin badge trang trí</span>
-                </div>
-                <div class="product-price">1đ</div>
-                <div class="stock-info">📦 Còn: 80 cái</div>
-                <div class="card-buttons">
-                    <button class="btn-edit" onclick="editProduct(7)">Sửa</button>
-                    <button class="btn-delete" onclick="deleteProduct(7)">Xóa</button>
-                </div>
-            </div>
-
-            <!-- Product 8 -->
-            <div class="product-card">
-                <div class="product-image">
-                    <img src="../images/cart/mockhoa1.jpg" alt="Móc khóa">
-                </div>
-                <div class="product-name">Móc khóa Permpoon </div>
-                <div class="product-info">
-                    <span>Móc khóa mica đẹp</span>
-                </div>
-                <div class="product-price">1đ</div>
-                <div class="stock-info">📦 Còn: 100 cái</div>
-                <div class="card-buttons">
-                    <button class="btn-edit" onclick="editProduct(8)">Sửa</button>
-                    <button class="btn-delete" onclick="deleteProduct(8)">Xóa</button>
-                </div>
-            </div>
-        </div>
+        <div class="shop-grid" id="shopGrid"><p>Đang tải sản phẩm...</p></div>
     </div>
 
+    <script src="../app.js"></script>
     <script>
+        const defaultProductImage = '../images/cart/box1.webp';
+        const formatVND = (v) => Number(v || 0).toLocaleString('vi-VN') + 'đ';
+        const escapeHTML = (value) => String(value ?? '').replace(/[&<>"']/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;' }[c]));
         function goBack() {
             window.location.href = "dashboard.html";
         }
@@ -593,27 +512,59 @@
         
 
         function addProduct() {
-            alert('Chức năng thêm sản phẩm mới sắp ra mắt!');
+            window.location.href='artist-add-product.html';
         }
 
         function editProduct(id) {
-            alert('Chỉnh sửa sản phẩm #' + id + ' sắp ra mắt!');
+            window.location.href='artist-edit-product.html?id='+id;
         }
 
-        function deleteProduct(id) {
+        async function deleteProduct(id) {
             if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
-                const cards = document.querySelectorAll('.product-card');
-                let count = 1;
-                for (let card of cards) {
-                    if (count === id) {
-                        card.remove();
-                        alert('Sản phẩm đã được xóa!');
-                        break;
-                    }
-                    count++;
-                }
+                await APIClient.deleteArtistProduct(id);
+                await loadProducts();
+                alert('Sản phẩm đã được xóa!');
             }
         }
+
+        function renderStats(products) {
+            const totalProducts = products.length;
+            const totalStock = products.reduce((sum, p) => sum + Number(p.stock || 0), 0);
+            const totalValue = products.reduce((sum, p) => sum + (Number(p.price || 0) * Number(p.stock || 0)), 0);
+            document.getElementById('totalProducts').textContent = totalProducts;
+            document.getElementById('totalStock').textContent = totalStock;
+            document.getElementById('totalValue').textContent = formatVND(totalValue);
+        }
+
+        function renderProducts(products) {
+            const grid = document.getElementById('shopGrid');
+            if (!products.length) {
+                grid.innerHTML = '<p>Chưa có sản phẩm nào.</p>';
+                return;
+            }
+            grid.innerHTML = products.map((product) => `
+                <div class="product-card">
+                    <div class="product-image"><img src="${escapeHTML(product.image ? APIClient.getImageUrl(product.image) : defaultProductImage)}" alt="${escapeHTML(product.name || 'Sản phẩm')}" onerror="this.onerror=null;this.src='${defaultProductImage}'"></div>
+                    <div class="product-name">${escapeHTML(product.name || 'Sản phẩm')}</div>
+                    <div class="product-info"><span>${escapeHTML(product.description || 'Chưa có mô tả')}</span></div>
+                    <div class="product-price">${formatVND(product.price)}</div>
+                    <div class="stock-info">📦 Còn: ${Number(product.stock || 0)} cái</div>
+                    <div class="card-buttons">
+                        <button class="btn-edit" onclick="editProduct(${Number(product.id)})">Sửa</button>
+                        <button class="btn-delete" onclick="deleteProduct(${Number(product.id)})">Xóa</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function loadProducts() {
+            const response = await APIClient.getArtistProducts();
+            const products = response?.data || [];
+            renderStats(products);
+            renderProducts(products);
+        }
+
+        document.addEventListener('DOMContentLoaded', loadProducts);
     </script>
 </body>
 </html>

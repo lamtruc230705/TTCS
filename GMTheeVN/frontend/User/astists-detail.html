@@ -272,7 +272,7 @@
         <div class="content">
             <!-- Artist Image -->
             <div class="artist-image-section">
-                <img id="artistImage"="../images/astist/joong.jpg" alt="Joong Archer" class="artist-image">
+                <img id="artistImage" src="../images/astist/joong.jpg" alt="Joong Archer" class="artist-image">
             </div>
 
             <!-- Artist Info -->
@@ -317,16 +317,7 @@
 
     <script src="../app.js"></script>
     <script>
-    const localArtistImages = {
-        1: '../images/astist/joong.jpg',
-        2: '../images/astist/Boom.jpg',
-        3: '../images/astist/aston.jpg',
-        4: '../images/astist/dunk.jpg',
-        5: '../images/astist/win.jpg',
-        6: '../images/astist/force.jpg',
-        7: '../images/astist/aou.jpg',
-        8: '../images/astist/bookaside.jpg'
-    };
+    const defaultArtistImage = '../images/astist/joong.jpg';
 
     function getArtistIdFromUrl() {
         const params = new URLSearchParams(window.location.search);
@@ -397,12 +388,12 @@
 
                 image.onerror = function () {
                     image.onerror = null;
-                    image.src = localArtistImages[artistId] || '../images/astist/joong.jpg';
+                    image.src = defaultArtistImage;
                 };
 
                 image.src = artist.image
                     ? APIClient.getImageUrl(artist.image)
-                    : localArtistImages[artistId] || '../images/astist/joong.jpg';
+                    : defaultArtistImage;
             }
 
             renderWorks(artist.works);

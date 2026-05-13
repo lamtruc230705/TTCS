@@ -308,7 +308,7 @@
         </nav>
         <div class="user-section">
             <div class="user-info">
-                <span>Joong Archer</span>
+                <span>Nghệ sĩ</span>
                 <div class="user-icon">👤</div>
             </div>
             <a href="../login.html" class="logout-link" onclick="localStorage.removeItem('token'); localStorage.removeItem('user');">Đăng xuất</a>
@@ -325,33 +325,9 @@
     <!-- ===== CỬA HÀNG ===== -->
     <section class="section" id="shop">
         <div class="section-title">CỬA HÀNG</div>
-        <div class="section-content">
-            <!-- Card 1 -->
-            <div class="card">
-                <div class="card-image">
-                    <img src="../images/cart/box1.webp" alt="Box Couple JimmySea">
-                </div>
-                <div class="card-title">Box Couple JimmySea</div>
-                <div class="card-description">Hộp quà tặng độc quyền</div>
-            </div>
-
-            <!-- Card 2 -->
-            <div class="card">
-                <div class="card-image">
-                    <img src="../images/cart/card1.webp" alt="Card Clover">
-                </div>
-                <div class="card-title">Card Clover</div>
-                <div class="card-description">Bộ thẻ ảnh độc quyền</div>
-            </div>
-
-            <!-- Card 3 -->
-            <div class="card">
-                <div class="card-image">
-                    <img src="../images/cart/tui1.webp" alt="Túi sách">
-                </div>
-                <div class="card-title">Túi sách</div>
-                <div class="card-description">Phụ kiện hữu ích</div>
-            </div>
+        <div class="section-content" id="homeProducts">
+            <p>Đang tải sản phẩm...</p>
+        
         </div>
         <div class="see-more">
             <a href="#shop">Xem thêm →</a>
@@ -361,31 +337,9 @@
     <!-- ===== DIỄN VIÊN ===== -->
     <section class="section" id="members">
         <div class="section-title">DIỄN VIÊN</div>
-        <div class="section-content">
-            <div class="card">
-                <div class="card-image">
-                    <img src="../images/astist/joong.jpg" alt="Joong Archer">
-                </div>
-                <div class="card-title">Joong Archer</div>
-                <div class="card-description">Diễn viên </div>
-            </div>
-
-            <div class="card">
-                <div class="card-image">
-                    <img src="../images/astist/Boom.jpg" alt="Boom Tharatorn">
-                </div>
-                <div class="card-title">Boom Tharatorn</div>
-                <div class="card-description">Diễn viên </div>
-            </div>
-
-    
-            <div class="card">
-                <div class="card-image">
-                    <img src="../images/astist/aston.jpg" alt="Aston Ratiphat">
-                </div>
-                <div class="card-title">Aston Ratiphat</div>
-                <div class="card-description">Diễn viên </div>
-            </div>
+        <div class="section-content" id="homeArtists">
+            <p>Đang tải nghệ sĩ...</p>
+        
         </div>
         <div class="see-more">
             <a href="#members">Xem thêm →</a>
@@ -401,7 +355,7 @@
                 <div class="footer-icon">📍</div>
                 <div class="footer-info">
                     <h3>Địa chỉ:</h3>
-                    <p>Hà Đông, Hà Nội</p>
+                    <p><span id="contactAddress">Đang cập nhật...</span></p>
                 </div>
             </div>
 
@@ -410,7 +364,7 @@
                 <div class="footer-icon">📞</div>
                 <div class="footer-info">
                     <h3>Số điện thoại:</h3>
-                    <p>19001900</p>
+                    <p><span id="contactPhone">Đang cập nhật...</span></p>
                 </div>
             </div>
 
@@ -419,7 +373,7 @@
                 <div class="footer-icon">✉️</div>
                 <div class="footer-info">
                     <h3>Email:</h3>
-                    <p>GMTheeVN@gmail.com</p>
+                    <p><span id="contactEmail">Đang cập nhật...</span></p>
                 </div>
             </div>
 
@@ -428,11 +382,24 @@
                 <div class="footer-icon">🌐</div>
                 <div class="footer-info">
                     <h3>Website:</h3>
-                    <p>www.GMTheeVN.com</p>
+                    <p><span id="contactWebsite">Đang cập nhật...</span></p>
                 </div>
             </div>
         </div>
     </footer>
+
+
+    <script src="../app.js"></script>
+    <script>
+        const defaultProductImage = '../images/cart/box1.webp';
+        const defaultArtistImage = '../images/astist/joong.jpg';
+        function escapeHTML(value){return String(value??'').replace(/[&<>"']/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
+        function renderHomeProducts(products){const c=document.getElementById('homeProducts');if(!Array.isArray(products)||products.length===0){c.innerHTML='<p>Chưa có sản phẩm nổi bật.</p>';return;}c.innerHTML=products.map((i)=>`<div class="card"><div class="card-image"><img src="${escapeHTML(i.image?APIClient.getImageUrl(i.image):defaultProductImage)}" alt="${escapeHTML(i.name||'Sản phẩm')}" onerror="this.onerror=null;this.src='${defaultProductImage}'"></div><div class="card-title">${escapeHTML(i.name||'Sản phẩm')}</div><div class="card-description">${APIClient.formatVND(i.price)}</div></div>`).join('');}
+        function renderHomeArtists(artists){const c=document.getElementById('homeArtists');if(!Array.isArray(artists)||artists.length===0){c.innerHTML='<p>Chưa có nghệ sĩ nổi bật.</p>';return;}c.innerHTML=artists.map((i)=>`<div class="card"><div class="card-image"><img src="${escapeHTML(i.image?APIClient.getImageUrl(i.image):defaultArtistImage)}" alt="${escapeHTML(i.stage_name||i.full_name||'Nghệ sĩ')}" onerror="this.onerror=null;this.src='${defaultArtistImage}'"></div><div class="card-title">${escapeHTML(i.stage_name||i.full_name||'Nghệ sĩ')}</div><div class="card-description">Diễn viên</div></div>`).join('');}
+        function renderContact(contact){if(!contact)return;document.getElementById('contactAddress').textContent=contact.address||'Đang cập nhật...';document.getElementById('contactPhone').textContent=contact.phone||'Đang cập nhật...';document.getElementById('contactEmail').textContent=contact.email||'Đang cập nhật...';document.getElementById('contactWebsite').textContent=contact.website||'Đang cập nhật...';}
+        async function loadHomeData(){try{const data=await APIClient.getHomeData();renderHomeProducts(data?.products||[]);renderHomeArtists(data?.artists||[]);renderContact(data?.contact||null);}catch(e){console.error(e);}}
+        document.addEventListener('DOMContentLoaded',loadHomeData);
+    </script>
 
     <script>
         // Smooth scroll

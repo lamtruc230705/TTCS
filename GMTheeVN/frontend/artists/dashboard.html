@@ -255,7 +255,7 @@
         </nav>
         <div class="user-section">
             <div class="user-info">
-                <span>Joong Archer</span>
+                <span id="artistName">Nghệ sĩ</span>
                 <div class="user-icon">👤</div>
             </div>
             <a href="../login.html" class="logout-link" onclick="localStorage.removeItem('token'); localStorage.removeItem('user');">Đăng xuất</a>
@@ -281,6 +281,7 @@
 
     <!-- ===== MAIN CONTENT ===== -->
     <div class="container">
+        <div id="artistStats" style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:22px;"></div>
         <div class="artist-menu">
 
             <a href="artist-profile.html" class="menu-item">
@@ -301,5 +302,35 @@
 
         </div>
     </div>
+    <script src="../app.js"></script>
+    <script>
+        function statCard(label, value){return `<div style="background:#fff;padding:10px 14px;border-radius:10px;min-width:180px;box-shadow:0 2px 8px rgba(0,0,0,.08)"><div style="font-size:12px;color:#666">${label}</div><div style="font-size:20px;font-weight:800">${value}</div></div>`}
+        function formatVND(v){return Number(v||0).toLocaleString('vi-VN')+'đ';}
+        async function loadArtistDashboard(){
+            const me = APIClient.getCurrentUser();
+            if(me) document.getElementById('artistName').textContent = me.full_name || me.username || 'Nghệ sĩ';
+            try{
+                const [products, orders, schedules, earnings, profile] = await Promise.all([
+                    APIClient.getArtistProducts(),
+                    APIClient.getArtistOrders(),
+                    APIClient.getArtistSchedules(),
+                    APIClient.getArtistEarnings(),
+                    APIClient.getArtistProfile()
+                ]);
+                const p = products?.data || [];
+                const o = orders?.data || [];
+                const s = schedules?.data || [];
+                const e = earnings?.data?.summary || {};
+                if (profile?.data?.stage_name) document.getElementById('artistName').textContent = profile.data.stage_name;
+                document.getElementById('artistStats').innerHTML = [
+                    statCard('Sản phẩm', p.length),
+                    statCard('Đơn hàng', o.length),
+                    statCard('Lịch trình', s.length),
+                    statCard('Đang chờ thanh toán', formatVND(e.pending_amount || 0))
+                ].join('');
+            }catch(err){console.error(err);}
+        }
+        document.addEventListener('DOMContentLoaded', loadArtistDashboard);
+    </script>
 </body>
 </html>

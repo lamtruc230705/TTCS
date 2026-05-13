@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Sửa nghệ sĩ</title></head>
+<body>
+<h2>Sửa nghệ sĩ</h2>
+<form id="f">
+  <input id="stage_name" required placeholder="Nghệ danh"><br>
+  <input id="full_name" required placeholder="Họ tên"><br>
+  <input id="birth_date" type="date"><br>
+  <input id="height" placeholder="Chiều cao"><br>
+  <input id="weight" placeholder="Cân nặng"><br>
+  <input id="partner_name" placeholder="Partner"><br>
+  <input id="mascot" placeholder="Linh vật"><br>
+  <button type="submit">Lưu</button> <a href="admin-artists.html">Hủy</a>
+</form>
+<script src="../app.js"></script>
+<script>
+ const id = new URLSearchParams(location.search).get('id');
+ async function load(){const r=await APIClient.getAdminArtist(id); const a=r?.data; if(!a)return; stage_name.value=a.stage_name||''; full_name.value=a.full_name||''; birth_date.value=a.birth_date?String(a.birth_date).slice(0,10):''; height.value=a.height||''; weight.value=a.weight||''; partner_name.value=a.partner_name||''; mascot.value=a.mascot||'';}
+ f.addEventListener('submit', async (e)=>{e.preventDefault(); await APIClient.updateAdminArtist(id,{stage_name:stage_name.value.trim(),full_name:full_name.value.trim(),birth_date:birth_date.value||null,height:height.value.trim(),weight:weight.value.trim(),partner_name:partner_name.value.trim(),mascot:mascot.value.trim(),status:'active'}); alert('Đã cập nhật'); location.href='admin-artists.html';});
+ load();
+</script></body></html>

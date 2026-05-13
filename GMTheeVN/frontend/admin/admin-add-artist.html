@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Thêm nghệ sĩ</title></head>
+<body>
+  <h2>Thêm nghệ sĩ mới</h2>
+  <form id="artistForm">
+    <input id="stage_name" placeholder="Nghệ danh" required><br>
+    <input id="full_name" placeholder="Họ tên" required><br>
+    <input id="birth_date" type="date"><br>
+    <input id="height" placeholder="Chiều cao"><br>
+    <input id="weight" placeholder="Cân nặng"><br>
+    <input id="partner_name" placeholder="Partner"><br>
+    <input id="mascot" placeholder="Linh vật"><br>
+    <button type="submit">Lưu</button>
+    <a href="admin-artists.html">Hủy</a>
+  </form>
+  <script src="../app.js"></script>
+  <script>
+    document.getElementById('artistForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        stage_name: document.getElementById('stage_name').value.trim(),
+        full_name: document.getElementById('full_name').value.trim(),
+        birth_date: document.getElementById('birth_date').value || null,
+        height: document.getElementById('height').value.trim(),
+        weight: document.getElementById('weight').value.trim(),
+        partner_name: document.getElementById('partner_name').value.trim(),
+        mascot: document.getElementById('mascot').value.trim(),
+        status: 'active'
+      };
+      await APIClient.createAdminArtist(payload);
+      alert('Đã tạo nghệ sĩ');
+      window.location.href = 'admin-artists.html';
+    });
+  </script>
+</body>
+</html>

@@ -262,7 +262,7 @@
         </nav>
         <div class="user-section">
             <div class="user-info">
-                <span>Joong Archer</span>
+                <span>Nghệ sĩ</span>
                 <div class="user-icon">👤</div>
             </div>
             <a href="../login.html" class="logout-link" onclick="localStorage.removeItem('token'); localStorage.removeItem('user');">Đăng xuất</a>
@@ -275,7 +275,7 @@
         <h1 class="page-title">💰 Doanh thu</h1>
 
         <!-- Earnings Cards -->
-        <div class="earnings-grid">
+        <div class="earnings-grid" id="earningSummary">
             <div class="earnings-card">
                 <div class="earnings-card-label">Tổng doanh thu</div>
                 <div class="earnings-card-amount">850.000đ</div>
@@ -309,48 +309,63 @@
                 <div>Số tiền</div>
                 <div>Trạng thái</div>
             </div>
-
-            <div class="table-row">
-                <div>11/03/2026</div>
-                <div>Doanh thu từ bán quà tặng</div>
-                <div class="amount">50.000đ</div>
-                <div>Chờ thanh toán</div>
-            </div>
-
-            <div class="table-row">
-                <div>10/03/2026</div>
-                <div>Tiền quảng cáo sản phẩm</div>
-                <div class="amount">75.000đ</div>
-                <div>Chờ thanh toán</div>
-            </div>
-
-            <div class="table-row">
-                <div>28/02/2026</div>
-                <div>Doanh thu từ phim "The Heart Killers"</div>
-                <div class="amount">300.000đ</div>
-                <div>Đã thanh toán</div>
-            </div>
-
-            <div class="table-row">
-                <div>28/02/2026</div>
-                <div>Tiền quảng cáo brand</div>
-                <div class="amount">450.000đ</div>
-                <div>Đã thanh toán</div>
-            </div>
-
-            <div class="table-row">
-                <div>25/01/2026</div>
-                <div>Doanh thu từ phim "Hidden Agenda"</div>
-                <div class="amount">200.000đ</div>
-                <div>Đã thanh toán</div>
-            </div>
+            <div id="earningRows"><div class="table-row"><div>Đang tải...</div><div></div><div></div><div></div></div></div>
         </div>
     </div>
 
+    <script src="../app.js"></script>
     <script>
+        const formatVND = (v) => Number(v || 0).toLocaleString('vi-VN') + 'đ';
+        const formatDate = (d) => d ? new Date(d).toLocaleDateString('vi-VN') : '--';
         function goBack() {
             window.location.href = "dashboard.html";
         }
+
+        function renderSummary(summary) {
+            const cards = [
+                ['Tổng doanh thu', summary.total_earned],
+                ['Tháng này', summary.this_month],
+                ['Đã thanh toán', summary.total_paid],
+                ['Chờ thanh toán', summary.pending_amount]
+            ];
+            document.getElementById('earningSummary').innerHTML = cards.map(([label, amount]) => `
+                <div class="earnings-card">
+                    <div class="earnings-card-label">${label}</div>
+                    <div class="earnings-card-amount">${formatVND(amount)}</div>
+                    <div class="earnings-card-change">Cập nhật theo dữ liệu hệ thống</div>
+                </div>
+            `).join('');
+        }
+
+        function renderRows(items) {
+            const rows = document.getElementById('earningRows');
+            if (!Array.isArray(items) || items.length === 0) {
+                rows.innerHTML = '<div class="table-row"><div>--</div><div>Chưa có dữ liệu</div><div class="amount">0đ</div><div>--</div></div>';
+                return;
+            }
+            rows.innerHTML = items.map((item) => `
+                <div class="table-row">
+                    <div>${formatDate(item.created_at || item.period_date)}</div>
+                    <div>${item.description || 'Doanh thu đơn hàng'}</div>
+                    <div class="amount">${formatVND(item.amount)}</div>
+                    <div>${item.status || 'pending'}</div>
+                </div>
+            `).join('');
+        }
+
+        async function loadEarnings() {
+            try {
+                const response = await APIClient.getArtistEarnings();
+                const data = response?.data || {};
+                renderSummary(data.summary || {});
+                renderRows(data.items || data.earnings || []);
+            } catch (error) {
+                console.error(error);
+                document.getElementById('earningRows').innerHTML = `<div class="table-row"><div>--</div><div>Không tải được dữ liệu</div><div class="amount">0đ</div><div>error</div></div>`;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadEarnings);
     </script>
 </body>
 </html>

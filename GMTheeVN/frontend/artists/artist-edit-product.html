@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Sửa sản phẩm artist</title></head>
+<body>
+<h2>Sửa sản phẩm</h2>
+<form id="f">
+  <input id="name" required><br><textarea id="description"></textarea><br>
+  <input id="price" type="number" min="0" step="1" required><br>
+  <input id="stock" type="number" min="0" step="1" required><br>
+  <button type="submit">Lưu</button> <a href="artist-shop.html">Hủy</a>
+</form>
+<script src="../app.js"></script>
+<script>
+ const id = new URLSearchParams(location.search).get('id');
+ async function load(){const r=await APIClient.getArtistProducts(); const p=(r?.data||[]).find(x=>String(x.id)===String(id)); if(!p)return; name.value=p.name||''; description.value=p.description||''; price.value=p.price||0; stock.value=p.stock||0;}
+ f.addEventListener('submit', async (e)=>{e.preventDefault(); await APIClient.updateArtistProduct(id,{name:name.value.trim(),description:description.value.trim(),price:Number(price.value||0),stock:Number(stock.value||0),status:'active'}); alert('Đã cập nhật'); location.href='artist-shop.html';});
+ load();
+</script></body></html>
