@@ -266,80 +266,59 @@
     <!-- ===== ARTISTS CONTENT ===== -->
     <div class="container">
         <!-- ===== ARTISTS GRID ===== -->
-        <div class="artists-grid">
-            <!-- Artist 1 -->
-            <div class="artist-card">
-                <div class="artist-image">
-                    <img src="../images/astist/joong.jpg" alt="Joong Archer">
-                </div>
-                <div class="artist-name">Joong Archer</div>
-                <a href="astists-detail.html?id=1" class="view-button">Xem chi tiết</a>
-            </div>
-
-            <!-- Artist 2 -->
-            <div class="artist-card">
-                <div class="artist-image">
-                    <img src="../images/astist/Boom.jpg" alt="Boom Tharatorn">
-                </div>
-                <div class="artist-name">Boom Tharatorn</div>
-                <a href="astists-detail.html?id=2" class="view-button">Xem chi tiết</a>
-            </div>
-
-            <!-- Artist 3 -->
-            <div class="artist-card">
-                <div class="artist-image">
-                    <img src="../images/astist/aston.jpg" alt="Aston Ratiphat">
-                </div>
-                <div class="artist-name">Aston Ratiphat</div>
-                <a href="astists-detail.html?id=3" class="view-button">Xem chi tiết</a>
-            </div>
-
-            <!-- Artist 4 -->
-            <div class="artist-card">
-                <div class="artist-image">
-                    <img src="../images/astist/dunk.jpg" alt="Dunk Natachai">
-                </div>
-                <div class="artist-name">Dunk Natachai</div>
-                <a href="astists-detail.html?id=4" class="view-button">Xem chi tiết</a>
-            </div>
-
-            <!-- Artist 5 -->
-            <div class="artist-card">
-                <div class="artist-image">
-                    <img src="../images/astist/win.jpg" alt="Win Metawin">
-                </div>
-                <div class="artist-name">Win Metawin</div>
-                <a href="astists-detail.html?id=5" class="view-button">Xem chi tiết</a>
-            </div>
-
-            <!-- Artist 6 -->
-            <div class="artist-card">
-                <div class="artist-image">
-                    <img src="../images/astist/force.jpg" alt="Force Jiratchapong">
-                </div>
-                <div class="artist-name">Force Jiratchapong</div>
-                <a href="astists-detail.html?id=6" class="view-button">Xem chi tiết</a>
-            </div>
-
-            <!-- Artist 7 -->
-            <div class="artist-card">
-                <div class="artist-image">
-                    <img src="../images/astist/aou.jpg" alt="Aou Thanaboon">
-                </div>
-                <div class="artist-name">Aou Thanaboon</div>
-                <a href="astists-detail.html?id=7" class="view-button">Xem chi tiết</a>
-            </div>
-
-            <!-- Artist 8 -->
-            <div class="artist-card">
-                <div class="artist-image">
-                    <img src="../images/astist/bookaside.jpg" alt="Book Kasidet">
-                </div>
-                <div class="artist-name">Book Kasidet</div>
-                <a href="astists-detail.html?id=8" class="view-button">Xem chi tiết</a>
-            </div>
+        <div class="artists-grid" id="artistsGrid">
+            <p>Đang tải danh sách nghệ sĩ...</p>
         </div>
     </div>
 
+    <script src="../app.js"></script>
+    <script>
+    const defaultArtistImage = '../images/astist/joong.jpg';
+
+    function escapeHTML(value) {
+        return String(value ?? '').replace(/[&<>"']/g, function(char) {
+            return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[char];
+        });
+    }
+
+    function getArtistDisplayName(artist) {
+        return artist.stage_name || artist.full_name || 'Nghệ sĩ';
+    }
+
+    function renderArtists(artists) {
+        const grid = document.getElementById('artistsGrid');
+        if (!Array.isArray(artists) || artists.length === 0) {
+            grid.innerHTML = '<p>Chưa có nghệ sĩ nào.</p>';
+            return;
+        }
+
+        grid.innerHTML = artists.map((artist) => {
+            const name = getArtistDisplayName(artist);
+            const imageUrl = artist.image ? APIClient.getImageUrl(artist.image) : defaultArtistImage;
+            return `
+                <div class="artist-card">
+                    <div class="artist-image">
+                        <img src="${escapeHTML(imageUrl)}" alt="${escapeHTML(name)}" onerror="this.onerror=null;this.src='${defaultArtistImage}'">
+                    </div>
+                    <div class="artist-name">${escapeHTML(name)}</div>
+                    <a href="astists-detail.html?id=${Number(artist.id)}" class="view-button">Xem chi tiết</a>
+                </div>
+            `;
+        }).join('');
+    }
+
+    async function loadArtists() {
+        const grid = document.getElementById('artistsGrid');
+        try {
+            const response = await APIClient.getArtists();
+            renderArtists(response?.data || []);
+        } catch (error) {
+            console.error(error);
+            grid.innerHTML = `<p>Không tải được danh sách nghệ sĩ: ${escapeHTML(error.message || 'Lỗi không xác định')}</p>`;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadArtists);
+    </script>
 </body>
 </html>

@@ -290,7 +290,7 @@
         </nav>
         <div class="user-section">
             <div class="user-info">
-                <span>Joong Archer</span>
+                <span>Nghệ sĩ</span>
                 <div class="user-icon">👤</div>
             </div>
             <a href="../login.html" class="logout-link" onclick="localStorage.removeItem('token'); localStorage.removeItem('user');">Đăng xuất</a>
@@ -360,10 +360,48 @@
         </div>
     </div>
 
+    <script src="../app.js"></script>
     <script>
-        function goBack() {
-            window.location.href = "dashboard.html";
+        function goBack() { window.location.href = "dashboard.html"; }
+        const formatDate = (v) => v ? new Date(v).toLocaleDateString('vi-VN') : '--';
+        const formatTime = (start, end) => {
+            if (!start) return '--';
+            const s = new Date(start).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+            if (!end) return s;
+            const e = new Date(end).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
+            return `${s} - ${e}`;
+        };
+        const statusClass = (s) => ({ upcoming: 'status-upcoming', completed: 'status-completed', cancelled: 'status-cancelled' }[s] || 'status-upcoming');
+        const statusLabel = (s) => ({ upcoming: 'Sắp tới', completed: 'Hoàn thành', cancelled: 'Đã hủy' }[s] || s || '--');
+
+        function renderSchedules(items) {
+            const table = document.querySelector('.schedule-table');
+            const header = table.querySelector('.table-header').outerHTML;
+            if (!Array.isArray(items) || items.length === 0) {
+                table.innerHTML = `${header}<div class="table-row"><div>--</div><div>Chưa có lịch trình</div><div>--</div><div>--</div><div>--</div></div>`;
+                return;
+            }
+            table.innerHTML = header + items.map((it) => `
+                <div class="table-row">
+                    <div><strong>${formatDate(it.start_time || it.start_date)}</strong></div>
+                    <div>${it.title || it.event_name || 'Sự kiện'}</div>
+                    <div>${formatTime(it.start_time, it.end_time)}</div>
+                    <div><span class="status-badge ${statusClass(it.status)}">${statusLabel(it.status)}</span></div>
+                    <div class="btn-group"><button class="btn-edit" data-id="${Number(it.id)}">Sửa</button><button class="btn-cancel" data-id="${Number(it.id)}">Hủy</button></div>
+                </div>`).join('');
         }
+
+        async function loadSchedules() {
+            const response = await APIClient.getArtistSchedules();
+            renderSchedules(response?.data || []);
+        }
+
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('btn-edit')) alert('Chức năng chỉnh sửa lịch trình đang được cập nhật!');
+            if (e.target.classList.contains('btn-cancel')) alert('Chức năng hủy lịch trình đang được cập nhật!');
+        });
+
+        document.addEventListener('DOMContentLoaded', loadSchedules);
     </script>
 </body>
 </html>

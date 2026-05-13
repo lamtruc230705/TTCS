@@ -293,7 +293,7 @@
         </nav>
         <div class="user-section">
             <div class="user-info">
-                <span>Joong Archer</span>
+                <span>Nghệ sĩ</span>
                 <div class="user-icon">👤</div>
             </div>
             <a href="../login.html" class="logout-link" onclick="localStorage.removeItem('token'); localStorage.removeItem('user');">Đăng xuất</a>
@@ -312,18 +312,18 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">Tên đầu tiên</label>
-                        <input type="text" class="form-input" value="Joong" placeholder="Tên đầu tiên">
+                        <input type="text" class="form-input" value="" placeholder="Tên đầu tiên">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Tên cuối</label>
-                        <input type="text" class="form-input" value="Archer" placeholder="Tên cuối">
+                        <input type="text" class="form-input" value="" placeholder="Tên cuối">
                     </div>
                 </div>
 
                 <div class="form-row full">
                     <div class="form-group">
                         <label class="form-label">Email</label>
-                        <input type="email" class="form-input" value="joong@gmtheevn.com" placeholder="Email">
+                        <input type="email" class="form-input" value="" placeholder="Email">
                     </div>
                 </div>
 
@@ -334,7 +334,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Số điện thoại</label>
-                        <input type="tel" class="form-input" value="0912345678" placeholder="Số điện thoại">
+                        <input type="tel" class="form-input" value="" placeholder="Số điện thoại">
                     </div>
                 </div>
             </div>
@@ -345,11 +345,11 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">Chiều cao</label>
-                        <input type="text" class="form-input" value="186 cm" placeholder="Chiều cao">
+                        <input type="text" class="form-input" value="" placeholder="Chiều cao">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Cân nặng</label>
-                        <input type="text" class="form-input" value="72 kg" placeholder="Cân nặng">
+                        <input type="text" class="form-input" value="" placeholder="Cân nặng">
                     </div>
                 </div>
 
@@ -357,13 +357,6 @@
                     <div class="form-group">
                         <label class="form-label">Tác phẩm</label>
                         <textarea class="form-textarea" placeholder="Viết về tác phẩm của bản thân...">
-                        Dare You To Death (2025)
-                        The Heart Killers (2024)
-                        Hidden Agenda (2023)
-                        Our Skyy 2 (2023)
-                        The Warp Effect (2023)
-                        Star & Sky: Star in My Mind (2022)
-                        2Moons2 (2019) 
                         </textarea>
                     </div>
                 </div>
@@ -371,11 +364,11 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">Partner</label>
-                        <input type="text" class="form-input" value="Dunk Natachai" placeholder="Partner">
+                        <input type="text" class="form-input" value="" placeholder="Partner">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Linh vật</label>
-                        <input type="text" class="form-input" value="Jadee" placeholder="Linh vật">
+                        <input type="text" class="form-input" value="" placeholder="Linh vật">
                     </div>
                 </div>
             </div>
@@ -388,15 +381,61 @@
         </div>
     </div>
 
+    <script src="../app.js"></script>
     <script>
-        function goBack() {
-            window.location.href = "dashboard.html";
+        const fields = {
+            firstName: () => document.querySelectorAll('.form-input')[0],
+            lastName: () => document.querySelectorAll('.form-input')[1],
+            email: () => document.querySelectorAll('.form-input')[2],
+            birthDate: () => document.querySelectorAll('.form-input')[3],
+            phone: () => document.querySelectorAll('.form-input')[4],
+            height: () => document.querySelectorAll('.form-input')[5],
+            weight: () => document.querySelectorAll('.form-input')[6],
+            works: () => document.querySelector('.form-textarea'),
+            partner: () => document.querySelectorAll('.form-input')[7],
+            mascot: () => document.querySelectorAll('.form-input')[8]
+        };
+
+        function goBack() { window.location.href = "dashboard.html"; }
+
+        function setProfile(profile) {
+            if (!profile) return;
+            const names = String(profile.full_name || '').trim().split(/\s+/);
+            fields.firstName().value = names[0] || '';
+            fields.lastName().value = names.slice(1).join(' ') || '';
+            fields.email().value = profile.email || '';
+            fields.birthDate().value = profile.birth_date ? String(profile.birth_date).slice(0, 10) : '';
+            fields.phone().value = profile.phone || '';
+            fields.height().value = profile.height || '';
+            fields.weight().value = profile.weight || '';
+            fields.partner().value = profile.partner_name || '';
+            fields.mascot().value = profile.mascot || '';
+            fields.works().value = Array.isArray(profile.works) ? profile.works.map((w) => w.title).join('\n') : '';
         }
 
-        function saveProfile() {
+        async function loadProfile() {
+            const response = await APIClient.getArtistProfile();
+            setProfile(response?.data || null);
+        }
+
+        async function saveProfile() {
+            const fullName = `${fields.firstName().value} ${fields.lastName().value}`.trim();
+            const payload = {
+                full_name: fullName,
+                email: fields.email().value.trim(),
+                birth_date: fields.birthDate().value || null,
+                phone: fields.phone().value.trim(),
+                height: fields.height().value.trim(),
+                weight: fields.weight().value.trim(),
+                partner_name: fields.partner().value.trim(),
+                mascot: fields.mascot().value.trim()
+            };
+            await APIClient.updateArtistProfile(payload);
             alert('Hồ sơ đã được cập nhật thành công!');
             goBack();
         }
+
+        document.addEventListener('DOMContentLoaded', loadProfile);
     </script>
 </body>
 </html>

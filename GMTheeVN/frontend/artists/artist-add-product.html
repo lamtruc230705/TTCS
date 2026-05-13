@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Artist - Thêm sản phẩm</title></head>
+<body>
+  <h2>Thêm sản phẩm của nghệ sĩ</h2>
+  <form id="artistProductForm">
+    <input id="name" placeholder="Tên sản phẩm" required><br>
+    <textarea id="description" placeholder="Mô tả"></textarea><br>
+    <input id="price" type="number" min="0" step="1" placeholder="Giá" required><br>
+    <input id="stock" type="number" min="0" step="1" placeholder="Số lượng" required><br>
+    <button type="submit">Lưu</button>
+    <a href="artist-shop.html">Hủy</a>
+  </form>
+  <script src="../app.js"></script>
+  <script>
+    document.getElementById('artistProductForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        name: document.getElementById('name').value.trim(),
+        description: document.getElementById('description').value.trim(),
+        price: Number(document.getElementById('price').value || 0),
+        stock: Number(document.getElementById('stock').value || 0),
+        status: 'active'
+      };
+      await APIClient.createArtistProduct(payload);
+      alert('Đã tạo sản phẩm');
+      window.location.href = 'artist-shop.html';
+    });
+  </script>
+</body>
+</html>

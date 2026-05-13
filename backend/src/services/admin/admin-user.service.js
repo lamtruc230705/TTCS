@@ -1,5 +1,4 @@
 const { query, execute, transaction } = require('../../config/database');
-const { hashPassword } = require('../../utils/hash');
 
 function createHttpError(message, statusCode = 400) {
   const error = new Error(message);
@@ -69,27 +68,23 @@ async function getUserDetail(id) {
 
 async function updateUser(id, payload) {
   const current = await getUserDetail(id);
-
-  if (payload.username || payload.email) {
-    const existed = await query(
-      'SELECT id FROM users WHERE (username = ? OR email = ?) AND id <> ?',
-      [payload.username || current.username, payload.email || current.email, id]
-    );
-    if (existed.length) throw createHttpError('Username hoac email da ton tai.', 409);
+  if (Object.prototype.hasOwnProperty.call(payload, 'username') && payload.username !== current.username) {
+    throw createHttpError('Khong cho phep thay doi username sau khi dang ky.', 422);
+  }
+  if (Object.prototype.hasOwnProperty.call(payload, 'email') && payload.email !== current.email) {
+    throw createHttpError('Khong cho phep thay doi email sau khi dang ky.', 422);
+  }
+  if (Object.prototype.hasOwnProperty.call(payload, 'password')) {
+    throw createHttpError('Khong cho phep thay doi mat khau trong chuc nang nay.', 422);
   }
 
   const fields = [];
   const params = [];
-  for (const key of ['username', 'full_name', 'email', 'phone', 'role', 'status']) {
+  for (const key of ['full_name', 'phone', 'role', 'status']) {
     if (Object.prototype.hasOwnProperty.call(payload, key)) {
       fields.push(`${key} = ?`);
       params.push(payload[key]);
     }
-  }
-
-  if (payload.password) {
-    fields.push('password = ?');
-    params.push(await hashPassword(payload.password));
   }
 
   if (fields.length) {
