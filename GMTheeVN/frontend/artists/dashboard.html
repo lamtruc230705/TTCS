@@ -129,26 +129,7 @@
             min-height: calc(100vh - 100px);
         }
 
-        /* ===== DECORATIONS ===== */
-        .decoration-top {
-            position: absolute;
-            top: 150px;
-            left: 80px;
-            width: 180px;
-            height: 180px;
-            opacity: 0.4;
-            z-index: 0;
-        }
-
-        .decoration-bottom {
-            position: absolute;
-            bottom: 100px;
-            right: 100px;
-            width: 200px;
-            height: 200px;
-            opacity: 0.4;
-            z-index: 0;
-        }
+        
 
         /* ===== ARTIST MENU ===== */
         .artist-menu {
@@ -248,9 +229,9 @@
 <body>
     <!-- ===== HEADER ===== -->
     <header>
-        <a href="../home.html" class="logo">GMTheeVN</a>
+        <a href="../artists/index.html" class="logo">GMTheeVN</a>
         <nav>
-            <a href="../home.html">Trang chủ</a>
+            <a href="../artists/index.html">Trang chủ</a>
             <a href="artist_dashboard.html">Bảng điều khiển</a>
         </nav>
         <div class="user-section">
@@ -261,23 +242,6 @@
             <a href="../login.html" class="logout-link" onclick="localStorage.removeItem('token'); localStorage.removeItem('user');">Đăng xuất</a>
         </div>
     </header>
-
-    <!-- ===== DECORATIONS ===== -->
-    <svg class="decoration-top" viewBox="0 0 180 180">
-        <path d="M 20 80 Q 30 70 40 65 Q 50 60 60 65 Q 70 70 75 80 Q 80 70 90 65 Q 100 60 110 65 Q 120 70 130 80 Q 140 70 150 65 Q 160 60 170 65" 
-              stroke="#d4a574" stroke-width="2" fill="none"/>
-        <circle cx="35" cy="75" r="3" fill="#d4a574"/>
-        <circle cx="60" cy="60" r="3" fill="#d4a574"/>
-        <circle cx="90" cy="70" r="3" fill="#d4a574"/>
-    </svg>
-
-    <svg class="decoration-bottom" viewBox="0 0 200 200">
-        <path d="M 170 20 Q 160 30 150 35 Q 140 40 130 35 Q 120 30 115 20 Q 110 30 100 35 Q 90 40 80 35 Q 70 30 60 20 Q 50 30 40 35 Q 30 40 20 35" 
-              stroke="#d4a574" stroke-width="2" fill="none"/>
-        <circle cx="150" cy="25" r="3" fill="#d4a574"/>
-        <circle cx="120" cy="40" r="3" fill="#d4a574"/>
-        <circle cx="90" cy="30" r="3" fill="#d4a574"/>
-    </svg>
 
     <!-- ===== MAIN CONTENT ===== -->
     <div class="container">

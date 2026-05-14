@@ -1,21 +1,108 @@
 <!DOCTYPE html>
-<html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Sửa nghệ sĩ</title></head>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sửa nghệ sĩ</title>
+
+  <style>
+    * { box-sizing: border-box; }
+    body { background: #b3ebff; font-family: Arial, sans-serif; margin: 0; min-height: 100vh; }
+    .container { background: #fff; max-width: 760px; margin: 40px auto; border-radius: 18px; box-shadow: 0 6px 24px #b3dde7c5; padding: 26px 40px 32px; }
+    h2 { color: #2381da; display: flex; align-items: center; font-weight: 900; font-size: 2rem; margin: 0 0 20px; }
+    h2::before { content: "🎭"; color: #53c1ff; font-size: 1.6rem; margin-right: 11px; font-weight: 900; }
+    label { font-weight: 700; margin: 16px 0 7px; display: block; font-size: 1rem; color: #222; }
+    input, textarea, select { width: 100%; padding: 13px 15px; border-radius: 9px; border: 1.5px solid #d7ecfa; font-size: 1rem; outline: none; background: #fafdff; font-family: inherit; }
+    .form-btns { display: flex; gap: 18px; margin-top: 24px; }
+    .form-btns button { flex: 1; border: none; font-size: 1.1em; padding: 13px 0; border-radius: 9px; font-weight: 800; cursor: pointer; font-family: inherit; }
+    .back-btn { background: #eee; color: #333; border: 1.5px solid #dadada !important; }
+    .main-btn { background: #0c61d5; color: #fff; border: 1.5px solid #1763be !important; }
+    .main-btn:disabled { opacity: .65; cursor: not-allowed; }
+  </style>
+</head>
+
 <body>
-<h2>Sửa nghệ sĩ</h2>
-<form id="f">
-  <input id="stage_name" required placeholder="Nghệ danh"><br>
-  <input id="full_name" required placeholder="Họ tên"><br>
-  <input id="birth_date" type="date"><br>
-  <input id="height" placeholder="Chiều cao"><br>
-  <input id="weight" placeholder="Cân nặng"><br>
-  <input id="partner_name" placeholder="Partner"><br>
-  <input id="mascot" placeholder="Linh vật"><br>
-  <button type="submit">Lưu</button> <a href="admin-artists.html">Hủy</a>
-</form>
-<script src="../app.js"></script>
-<script>
- const id = new URLSearchParams(location.search).get('id');
- async function load(){const r=await APIClient.getAdminArtist(id); const a=r?.data; if(!a)return; stage_name.value=a.stage_name||''; full_name.value=a.full_name||''; birth_date.value=a.birth_date?String(a.birth_date).slice(0,10):''; height.value=a.height||''; weight.value=a.weight||''; partner_name.value=a.partner_name||''; mascot.value=a.mascot||'';}
- f.addEventListener('submit', async (e)=>{e.preventDefault(); await APIClient.updateAdminArtist(id,{stage_name:stage_name.value.trim(),full_name:full_name.value.trim(),birth_date:birth_date.value||null,height:height.value.trim(),weight:weight.value.trim(),partner_name:partner_name.value.trim(),mascot:mascot.value.trim(),status:'active'}); alert('Đã cập nhật'); location.href='admin-artists.html';});
- load();
-</script></body></html>
+  <div class="container">
+    <h2>Sửa nghệ sĩ</h2>
+
+    <form id="artistForm">
+      <label for="stage_name">Nghệ danh</label>
+      <input type="text" id="stage_name" placeholder="Ví dụ: Sơn Tùng M-TP" required>
+
+      <label for="full_name">Họ tên đầy đủ</label>
+      <input type="text" id="full_name" placeholder="Ví dụ: Nguyễn Thanh Tùng">
+
+      <label for="user_id">Gmail tài khoản Artist</label>
+      <select id="user_id" required>
+        <option value="">-- Chọn Gmail tài khoản artist --</option>
+      </select>
+
+      <label for="artistImage">Ảnh nghệ sĩ hiện tại</label>
+      <img id="preview-img" alt="Ảnh nghệ sĩ">
+      <input type="file" id="artistImage" accept="image/*">
+
+      <label for="birth_date">Ngày sinh</label>
+      <input type="date" id="birth_date">
+
+      <label for="artist_role">Vai trò / lĩnh vực</label>
+      <input type="text" id="artist_role" placeholder="Ví dụ: Ca sĩ, diễn viên">
+
+      <label for="height">Chiều cao</label>
+      <input type="text" id="height" placeholder="Ví dụ: 170cm">
+
+      <label for="weight">Cân nặng</label>
+      <input type="text" id="weight" placeholder="Ví dụ: 60kg">
+
+      <label for="partner_name">Partner</label>
+      <input type="text" id="partner_name" placeholder="Ví dụ: Công ty quản lý / cộng sự">
+
+      <label for="mascot">Linh vật</label>
+      <input type="text" id="mascot" placeholder="Ví dụ: Mèo xanh">
+
+      <label for="description">Mô tả</label>
+      <textarea id="description" rows="3" placeholder="Mô tả ngắn về nghệ sĩ..."></textarea>
+
+      <label for="works">Tác phẩm</label>
+      <textarea id="works" rows="4" placeholder="Mỗi dòng một tác phẩm. Ví dụ:
+Chúng ta của hiện tại | 2020
+Muộn rồi mà sao còn | 2021"></textarea>
+
+      <label for="status">Trạng thái</label>
+      <select id="status">
+        <option value="active">Hiển thị</option>
+        <option value="hidden">Ẩn</option>
+      </select>
+
+      <div class="form-btns">
+        <button type="button" class="back-btn" onclick="window.location.href='admin-artists.html'">← Quay lại</button>
+        <button type="submit" class="main-btn">Lưu thay đổi</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="../app.js"></script>
+  <script>
+    // Code load và xử lý dữ liệu nghệ sĩ ở đây
+    async function loadArtistUserOptions() {
+      try {
+        const users = await APIClient.getAdminUsers();
+        const artists = await APIClient.getAdminArtists();
+        
+        const userSelect = document.getElementById('user_id');
+        userSelect.innerHTML = '<option value="">-- Chọn Gmail tài khoản artist --</option>';
+
+        users.data.filter(user => user.role === 'artist').forEach(user => {
+          const option = document.createElement('option');
+          option.value = user.id;
+          option.textContent = user.email;
+          userSelect.appendChild(option);
+        });
+      } catch (error) {
+        console.error('Error loading users', error);
+      }
+    }
+
+    loadArtistUserOptions();
+  </script>
+</body>
+</html>

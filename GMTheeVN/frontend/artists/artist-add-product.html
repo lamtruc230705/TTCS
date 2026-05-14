@@ -1,31 +1,514 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Artist - Thêm sản phẩm</title></head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Thêm sản phẩm của nghệ sĩ</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #b3ebff;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #111;
+    }
+
+    /* ================= HEADER ================= */
+
+    .topbar {
+      height: 84px;
+      padding: 16px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid #8ed3ff;
+      background: #b3ebff;
+    }
+
+    .left-nav {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }
+
+    .logo {
+      background: #fff;
+      color: #0057c7;
+      font-weight: 800;
+      font-size: 20px;
+      letter-spacing: 1.5px;
+      padding: 8px 18px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+      text-decoration: none;
+      line-height: 1;
+    }
+
+    .nav-link {
+      color: #000;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .nav-link:hover {
+      color: #0c61d5;
+    }
+
+    .user-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .user-name {
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .logout {
+      display: block;
+      margin-top: 4px;
+      color: #ef4444;
+      font-size: 12px;
+      text-decoration: none;
+      text-align: center;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #2563eb;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 17px;
+    }
+
+    /* ================= PAGE ================= */
+
+    .page {
+      max-width: 760px;
+      margin: 42px auto;
+      padding: 0 18px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 30px 40px 36px;
+      box-shadow: 0 8px 26px rgba(57, 143, 174, 0.28);
+    }
+
+    h1 {
+      margin: 0 0 26px;
+      color: #0c61d5;
+      font-size: 30px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      letter-spacing: 0;
+    }
+
+    h1::before {
+      content: "+";
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #dff6ff;
+      color: #0c61d5;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    label {
+      display: block;
+      margin: 17px 0 7px;
+      font-weight: 700;
+      font-size: 15px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      border: 1.5px solid #d7ecfa;
+      border-radius: 9px;
+      background: #fafdff;
+      padding: 12px 15px;
+      font-size: 15px;
+      font-family: Arial, Helvetica, sans-serif;
+      outline: none;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      background: #fff;
+      border-color: #53c1ff;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #6b7280;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    #preview-img {
+      display: none;
+      max-width: 100%;
+      max-height: 180px;
+      margin-top: 12px;
+      border-radius: 12px;
+      border: 1.5px solid #e3eef8;
+      background: #e1f5ff;
+      object-fit: contain;
+    }
+
+    .note {
+      margin-top: 8px;
+      color: #64748b;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    button,
+    .cancel-btn {
+      flex: 1;
+      border: none;
+      border-radius: 9px;
+      padding: 13px 18px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .save-btn {
+      background: #0c61d5;
+      color: #fff;
+      border: 1.5px solid #1763be;
+    }
+
+    .save-btn:hover {
+      filter: brightness(1.08);
+    }
+
+    .save-btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .cancel-btn {
+      background: #eeeeee;
+      color: #333;
+      border: 1.5px solid #dadada;
+    }
+
+    .cancel-btn:hover {
+      filter: brightness(0.96);
+    }
+
+    /* ================= RESPONSIVE ================= */
+
+    @media (max-width: 700px) {
+      .topbar {
+        height: auto;
+        padding: 14px 18px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+      }
+
+      .left-nav {
+        flex-wrap: wrap;
+        gap: 18px;
+      }
+
+      .page {
+        margin: 24px auto;
+      }
+
+      .card {
+        padding: 24px 20px 28px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .row {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
 <body>
-  <h2>Thêm sản phẩm của nghệ sĩ</h2>
-  <form id="artistProductForm">
-    <input id="name" placeholder="Tên sản phẩm" required><br>
-    <textarea id="description" placeholder="Mô tả"></textarea><br>
-    <input id="price" type="number" min="0" step="1" placeholder="Giá" required><br>
-    <input id="stock" type="number" min="0" step="1" placeholder="Số lượng" required><br>
-    <button type="submit">Lưu</button>
-    <a href="artist-shop.html">Hủy</a>
-  </form>
+  <!-- HEADER -->
+  <header class="topbar">
+    <div class="left-nav">
+      <a href="../index.html" class="logo">GMTheeVN</a>
+      <a href="../index.html" class="nav-link">Trang chủ</a>
+      <a href="dashboard.html" class="nav-link">Khu vực nghệ sĩ</a>
+    </div>
+
+    <div class="user-box">
+      <div class="user-name">
+        <div id="artistName">Artist</div>
+        <span class="logout" onclick="logout()">Đăng xuất</span>
+      </div>
+      <div class="avatar">👤</div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="page">
+    <section class="card">
+      <h1>Thêm sản phẩm của nghệ sĩ</h1>
+
+      <form id="productForm">
+        <label for="name">Tên sản phẩm</label>
+        <input
+          type="text"
+          id="name"
+          placeholder="Ví dụ: Áo thun official"
+          required
+        />
+
+        <label for="image">Ảnh sản phẩm</label>
+        <input type="file" id="image" accept="image/*" />
+        <img id="preview-img" alt="Ảnh xem trước" />
+
+        <label for="description">Mô tả</label>
+        <textarea
+          id="description"
+          placeholder="Nhập mô tả ngắn về sản phẩm..."
+        ></textarea>
+
+        <div class="row">
+          <div>
+            <label for="price">Giá</label>
+            <input
+              type="number"
+              id="price"
+              min="0"
+              placeholder="Ví dụ: 150000"
+              required
+            />
+          </div>
+
+          <div>
+            <label for="stock">Số lượng</label>
+            <input
+              type="number"
+              id="stock"
+              min="1"
+              placeholder="Ví dụ: 10"
+              required
+            />
+          </div>
+        </div>
+
+        <label for="status">Trạng thái</label>
+        <select id="status">
+          <option value="active">Hiển thị</option>
+          <option value="hidden">Ẩn</option>
+        </select>
+
+        <div class="note">
+          Sản phẩm tạo tại đây sẽ tự động gắn với tài khoản nghệ sĩ đang đăng nhập.
+        </div>
+
+        <div class="buttons">
+          <a href="artist-shop.html" class="cancel-btn">← Hủy</a>
+          <button type="submit" class="save-btn">Lưu sản phẩm</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
   <script src="../app.js"></script>
+
   <script>
-    document.getElementById('artistProductForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const payload = {
-        name: document.getElementById('name').value.trim(),
-        description: document.getElementById('description').value.trim(),
-        price: Number(document.getElementById('price').value || 0),
-        stock: Number(document.getElementById('stock').value || 0),
-        status: 'active'
-      };
-      await APIClient.createArtistProduct(payload);
-      alert('Đã tạo sản phẩm');
-      window.location.href = 'artist-shop.html';
+    const productForm = document.getElementById('productForm');
+    const imageInput = document.getElementById('image');
+    const previewImg = document.getElementById('preview-img');
+    const saveBtn = document.querySelector('.save-btn');
+
+    function requireArtist() {
+      const token = APIClient.getToken();
+      const user = APIClient.getCurrentUser();
+
+      if (!token || !user) {
+        alert('Bạn cần đăng nhập trước.');
+        window.location.href = '../login.html';
+        return false;
+      }
+
+      if (user.role !== 'artist') {
+        alert('Chỉ tài khoản artist mới được thêm sản phẩm tại trang này.');
+        window.location.href = '../login.html';
+        return false;
+      }
+
+      document.getElementById('artistName').textContent =
+        user.full_name || user.username || 'Artist';
+
+      return true;
+    }
+
+    function logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '../login.html';
+    }
+
+    function getValue(id) {
+      return document.getElementById(id).value.trim();
+    }
+
+    function getCreatedProductId(response) {
+      return (
+        response?.data?.id ||
+        response?.data?.product?.id ||
+        response?.product?.id ||
+        response?.id ||
+        null
+      );
+    }
+
+    async function uploadProductImage(productId, file) {
+      const formData = new FormData();
+
+      formData.append('image', file);
+      formData.append('is_main', 'true');
+
+      return APIClient.request(
+        'POST',
+        `/upload/products/${productId}/image`,
+        formData
+      );
+    }
+
+    imageInput.addEventListener('change', function () {
+      const file = imageInput.files && imageInput.files[0];
+
+      if (!file) {
+        previewImg.removeAttribute('src');
+        previewImg.style.display = 'none';
+        return;
+      }
+
+      previewImg.src = URL.createObjectURL(file);
+      previewImg.style.display = 'block';
     });
+
+    productForm.addEventListener('submit', async function (event) {
+      event.preventDefault();
+
+      if (!requireArtist()) return;
+
+      const name = getValue('name');
+      const description = getValue('description');
+      const price = Number(getValue('price'));
+      const stock = Number(getValue('stock'));
+      const status = getValue('status') || 'active';
+      const imageFile = imageInput.files && imageInput.files[0];
+
+      if (!name) {
+        alert('Vui lòng nhập tên sản phẩm.');
+        return;
+      }
+
+      if (!Number.isFinite(price) || price < 0) {
+        alert('Giá sản phẩm không hợp lệ.');
+        return;
+      }
+
+      if (!Number.isInteger(stock) || stock < 1) {
+        alert('Số lượng sản phẩm phải lớn hơn 0.');
+        return;
+      }
+
+      const payload = {
+        name: name,
+        description: description,
+        price: price,
+        stock: stock,
+        status: status,
+        is_featured: false,
+        artist_ids: []
+      };
+
+      try {
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Đang lưu...';
+
+        const response = await APIClient.request(
+          'POST',
+          '/artist/products',
+          payload
+        );
+
+        const productId = getCreatedProductId(response);
+
+        if (imageFile && productId) {
+          await uploadProductImage(productId, imageFile);
+        }
+
+        alert('Thêm sản phẩm thành công.');
+        window.location.href = 'artist-shop.html';
+      } catch (error) {
+        console.error(error);
+        alert(error.message || 'Lỗi thêm sản phẩm.');
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Lưu sản phẩm';
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', requireArtist);
   </script>
 </body>
 </html>

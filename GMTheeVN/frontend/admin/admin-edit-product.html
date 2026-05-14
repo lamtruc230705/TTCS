@@ -1,17 +1,294 @@
 <!DOCTYPE html>
-<html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Sửa sản phẩm</title></head>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Sửa sản phẩm</title>
+  <style>
+    body {
+      background: #b3ebff;
+      font-family: 'Inter', Arial, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+    }
+    .container {
+      background: #fff;
+      max-width: 700px;
+      margin: 40px auto;
+      border-radius: 18px;
+      box-shadow: 0 6px 24px #b3dde7c5;
+      padding: 26px 40px 32px 40px;
+    }
+    .container h2 {
+      color: #2381da;
+      display: flex;
+      align-items: center;
+      font-weight: 700;
+      font-size: 2rem;
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+    }
+    .container h2::before {
+      content: "\270E";
+      color: #53c1ff;
+      font-size: 1.6rem;
+      margin-right: 11px;
+      font-weight: bold;
+    }
+    label {
+      font-weight: 600;
+      margin: 18px 0 7px 0;
+      display: block;
+      font-size: 1rem;
+      color: #222;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 13px 15px;
+      border-radius: 9px;
+      border: 1.5px solid #d7ecfa;
+      font-size: 1rem;
+      outline: none;
+      margin-bottom: 2px;
+      transition: border .2s;
+      background: #fafdff;
+      font-family: inherit;
+    }
+    input:focus, textarea:focus, select:focus {
+      border: 1.5px solid #53c1ff;
+      background: #fff;
+    }
+    ::placeholder {
+      color: #a9bfcf !important;
+      font-style: italic;
+      font-size: .97em;
+    }
+    .form-btns {
+      display: flex;
+      gap: 18px;
+      margin-top: 24px;
+    }
+    .form-btns button {
+      flex: 1;
+      border: none;
+      font-size: 1.1em;
+      padding: 13px 0;
+      border-radius: 9px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: filter .15s;
+    }
+    .back-btn {
+      background: #eee;
+      color: #333;
+      border: 1.5px solid #dadada;
+    }
+    .back-btn:hover { filter: brightness(0.95);}
+    .main-btn {
+      background: #0c61d5;
+      color: #fff;
+      border: 1.5px solid #1763be;
+    }
+    .main-btn:hover { filter: brightness(1.08); }
+    #preview-img {
+      display: block;
+      max-height: 160px;
+      max-width: 100%;
+      margin-top: 12px;
+      border-radius: 10px;
+      border: 1.5px solid #e3eef8;
+      background: #e1f5ff;
+      object-fit: contain;
+    }
+  </style>
+</head>
 <body>
-<h2>Sửa sản phẩm</h2>
-<form id="f">
-  <input id="name" required><br><textarea id="description"></textarea><br>
-  <input id="price" type="number" min="0" step="1" required><br>
-  <input id="stock" type="number" min="0" step="1" required><br>
-  <button type="submit">Lưu</button> <a href="admin-products.html">Hủy</a>
-</form>
-<script src="../app.js"></script>
-<script>
- const id = new URLSearchParams(location.search).get('id');
- async function load(){const r=await APIClient.getAdminProducts(); const p=(r?.data||[]).find(x=>String(x.id)===String(id)); if(!p)return; name.value=p.name||''; description.value=p.description||''; price.value=p.price||0; stock.value=p.stock||0;}
- f.addEventListener('submit', async (e)=>{e.preventDefault(); await APIClient.updateAdminProduct(id,{name:name.value.trim(),description:description.value.trim(),price:Number(price.value||0),stock:Number(stock.value||0),status:'active'}); alert('Đã cập nhật'); location.href='admin-products.html';});
- load();
-</script></body></html>
+  <div class="container">
+    <h2>Sửa sản phẩm</h2>
+    <form id="editProductForm">
+      <label for="productName">Tên sản phẩm</label>
+      <input type="text" id="productName" name="productName"
+        placeholder="Ví dụ: Áo sơ mi kẻ sọc" required>
+
+      <label for="productImage">Ảnh sản phẩm hiện tại</label>
+      <img id="preview-img" alt="Ảnh sản phẩm" style="display:none;">
+      <input type="file" id="productImage" name="productImage" accept="image/*">
+
+      <label for="price">Giá</label>
+      <input type="number" id="price" name="price" required min="0"
+        placeholder="Ví dụ: 200000">
+
+      <label for="quantity">Số lượng</label>
+      <input type="number" id="quantity" name="quantity" required min="1"
+        placeholder="Ví dụ: 15">
+
+      <label for="description">Mô tả</label>
+      <textarea id="description" name="description" rows="3"
+        placeholder="Mô tả sản phẩm..."></textarea>
+
+      <div class="form-btns">
+        <button type="button" class="back-btn" onclick="window.history.back()">← Quay lại</button>
+        <button type="submit" class="main-btn">Lưu thay đổi</button>
+      </div>
+    </form>
+  </div>
+  
+  <script src="../app.js"></script>
+  <script>
+    const editProductForm = document.getElementById('editProductForm');
+    const productNameInput = document.getElementById('productName');
+    const productImageInput = document.getElementById('productImage');
+    const priceInput = document.getElementById('price');
+    const quantityInput = document.getElementById('quantity');
+    const descriptionInput = document.getElementById('description');
+    const previewImg = document.getElementById('preview-img');
+    const submitBtn = document.querySelector('.main-btn');
+
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get('id');
+
+    function requireAdmin() {
+      const token = APIClient.getToken();
+      const user = APIClient.getCurrentUser();
+
+      if (!token || !user) {
+        alert('Bạn cần đăng nhập admin trước.');
+        window.location.href = '../login.html';
+        return false;
+      }
+
+      if (user.role !== 'admin') {
+        alert('Chỉ admin mới được sửa sản phẩm ở trang này.');
+        window.location.href = '../login.html';
+        return false;
+      }
+
+      return true;
+    }
+
+    function showProductImage(imagePath) {
+      if (!imagePath) {
+        previewImg.removeAttribute('src');
+        previewImg.style.display = 'none';
+        return;
+      }
+
+      previewImg.src = APIClient.getImageUrl(imagePath);
+      previewImg.style.display = 'block';
+    }
+
+    async function uploadProductImage(productId, file) {
+      const imageFormData = new FormData();
+      imageFormData.append('image', file);
+      imageFormData.append('is_main', 'true');
+
+      return APIClient.request(
+        'POST',
+        `/upload/products/${productId}/image`,
+        imageFormData
+      );
+    }
+
+    async function loadProductDetail() {
+      if (!requireAdmin()) return;
+
+      if (!productId) {
+        alert('Thiếu ID sản phẩm trên URL.');
+        window.location.href = 'admin-products.html';
+        return;
+      }
+
+      try {
+        // Backend hiện chưa có GET /api/admin/products/:id
+        // nên lấy danh sách admin products rồi tìm theo id.
+        const response = await APIClient.getAdminProducts();
+        const products = response?.data || [];
+        const product = products.find(item => String(item.id) === String(productId));
+
+        if (!product) {
+          alert('Không tìm thấy sản phẩm cần sửa.');
+          window.location.href = 'admin-products.html';
+          return;
+        }
+
+        productNameInput.value = product.name || '';
+        priceInput.value = product.price || 0;
+        quantityInput.value = product.stock || 0;
+        descriptionInput.value = product.description || '';
+
+        showProductImage(product.image);
+      } catch (error) {
+        console.error(error);
+        alert(error.message || 'Lỗi tải thông tin sản phẩm.');
+      }
+    }
+
+    productImageInput.addEventListener('change', function (e) {
+      const file = e.target.files && e.target.files[0];
+
+      if (file) {
+        previewImg.src = URL.createObjectURL(file);
+        previewImg.style.display = 'block';
+      }
+    });
+
+    editProductForm.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      if (!requireAdmin()) return;
+
+      const name = productNameInput.value.trim();
+      const description = descriptionInput.value.trim();
+      const price = Number(priceInput.value || 0);
+      const stock = Number(quantityInput.value || 0);
+      const imageFile = productImageInput.files && productImageInput.files[0];
+
+      if (!name) {
+        alert('Vui lòng nhập tên sản phẩm.');
+        return;
+      }
+
+      if (price < 0) {
+        alert('Giá sản phẩm không hợp lệ.');
+        return;
+      }
+
+      if (stock < 1) {
+        alert('Số lượng sản phẩm phải lớn hơn 0.');
+        return;
+      }
+
+      const payload = {
+        name: name,
+        description: description,
+        price: price,
+        stock: stock,
+        status: 'active'
+      };
+
+      try {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Đang lưu...';
+
+        // Bước 1: cập nhật thông tin sản phẩm
+        await APIClient.updateAdminProduct(productId, payload);
+
+        // Bước 2: nếu admin chọn ảnh mới thì upload ảnh mới
+        if (imageFile) {
+          await uploadProductImage(productId, imageFile);
+        }
+
+        alert('Cập nhật sản phẩm thành công.');
+        window.location.href = 'admin-products.html';
+      } catch (error) {
+        console.error(error);
+        alert(error.message || 'Lỗi cập nhật sản phẩm.');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Lưu thay đổi';
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', loadProductDetail);
+  </script>
+</body>
+</html>

@@ -1,31 +1,245 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Thêm sản phẩm</title></head>
+<head>
+  <meta charset="UTF-8">
+  <title>Thêm sản phẩm mới</title>
+  <style>
+    body {
+      background: #b3ebff;
+      font-family: 'Inter', Arial, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+    }
+    .container {
+      background: #fff;
+      max-width: 700px;
+      margin: 40px auto;
+      border-radius: 18px;
+      box-shadow: 0 6px 24px #b3dde7c5;
+      padding: 26px 40px 32px 40px;
+    }
+    .container h2 {
+      color: #2381da;
+      display: flex;
+      align-items: center;
+      font-weight: 700;
+      font-size: 2rem;
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+    }
+    .container h2::before {
+      content: "+";
+      color: #53c1ff;
+      font-size: 2.2rem;
+      margin-right: 11px;
+      font-weight: bold;
+    }
+    label {
+      font-weight: 600;
+      margin: 18px 0 7px 0;
+      display: block;
+      font-size: 1rem;
+      color: #222;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 13px 15px;
+      border-radius: 9px;
+      border: 1.5px solid #d7ecfa;
+      font-size: 1rem;
+      outline: none;
+      margin-bottom: 2px;
+      transition: border .2s;
+      background: #fafdff;
+      font-family: inherit;
+    }
+    input:focus, textarea:focus, select:focus {
+      border: 1.5px solid #53c1ff;
+      background: #fff;
+    }
+    ::placeholder {
+      color: #a9bfcf !important;
+      font-style: italic;
+      font-size: .97em;
+    }
+    .form-btns {
+      display: flex;
+      gap: 18px;
+      margin-top: 24px;
+    }
+    .form-btns button {
+      flex: 1;
+      border: none;
+      font-size: 1.1em;
+      padding: 13px 0;
+      border-radius: 9px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: filter .15s;
+    }
+    .back-btn {
+      background: #eee;
+      color: #333;
+      border: 1.5px solid #dadada;
+    }
+    .back-btn:hover { filter: brightness(0.95);}
+    .main-btn {
+      background: #0c61d5;
+      color: #fff;
+      border: 1.5px solid #1763be;
+    }
+    .main-btn:hover { filter: brightness(1.08); }
+    #preview-img {
+      display: none;
+      max-height: 160px;
+      max-width: 100%;
+      margin-top: 12px;
+      border-radius: 10px;
+      border: 1.5px solid #e3eef8;
+      background: #e1f5ff;
+      object-fit: contain;
+    }
+  </style>
+</head>
 <body>
-  <h2>Thêm sản phẩm mới</h2>
-  <form id="productForm">
-    <input id="name" placeholder="Tên sản phẩm" required><br>
-    <textarea id="description" placeholder="Mô tả"></textarea><br>
-    <input id="price" type="number" min="0" step="1" placeholder="Giá" required><br>
-    <input id="stock" type="number" min="0" step="1" placeholder="Số lượng" required><br>
-    <button type="submit">Lưu</button>
-    <a href="admin-products.html">Hủy</a>
-  </form>
+  <div class="container">
+    <h2>Thêm sản phẩm mới</h2>
+    <form id="addProductForm">
+      <label for="productName">Tên sản phẩm</label>
+      <input type="text" id="productName" name="productName" placeholder="Ví dụ: Áo thun Oversize" required>
+      
+      <label for="productImage">Ảnh sản phẩm</label>
+      <input type="file" id="productImage" name="productImage" accept="image/*">
+      <img id="preview-img"/>
+
+      <label for="price">Giá</label>
+      <input type="number" id="price" name="price" required min="0" placeholder="Ví dụ: 150000">
+
+      <label for="quantity">Số lượng</label>
+      <input type="number" id="quantity" name="quantity" required min="1" placeholder="Ví dụ: 10">
+
+      <label for="description">Mô tả</label>
+      <textarea id="description" name="description" placeholder="Mô tả ngắn về sản phẩm..." rows="3"></textarea>
+
+      <div class="form-btns">
+        <button type="button" class="back-btn" onclick="window.history.back()">← Quay lại</button>
+        <button type="submit" class="main-btn">Thêm sản phẩm</button>
+      </div>
+    </form>
+  </div>
   <script src="../app.js"></script>
   <script>
-    document.getElementById('productForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const payload = {
-        name: document.getElementById('name').value.trim(),
-        description: document.getElementById('description').value.trim(),
-        price: Number(document.getElementById('price').value || 0),
-        stock: Number(document.getElementById('stock').value || 0),
-        status: 'active'
-      };
-      await APIClient.createAdminProduct(payload);
-      alert('Đã tạo sản phẩm');
-      window.location.href = 'admin-products.html';
+    const addProductForm = document.getElementById('addProductForm');
+    const productImageInput = document.getElementById('productImage');
+    const previewImg = document.getElementById('preview-img');
+    const submitBtn = document.querySelector('.main-btn');
+
+    // Kiểm tra đăng nhập admin
+    function requireAdmin() {
+      const token = APIClient.getToken();
+      const user = APIClient.getCurrentUser();
+
+      if (!token || !user) {
+        alert('Bạn cần đăng nhập admin trước.');
+        window.location.href = '../login.html';
+        return false;
+      }
+
+      if (user.role !== 'admin') {
+        alert('Chỉ admin mới được thêm sản phẩm ở trang này.');
+        window.location.href = '../login.html';
+        return false;
+      }
+
+      return true;
+    }
+
+    // Preview ảnh khi chọn
+    productImageInput.addEventListener('change', function (e) {
+      const file = e.target.files && e.target.files[0];
+
+      if (file) {
+        previewImg.src = URL.createObjectURL(file);
+        previewImg.style.display = 'block';
+      } else {
+        previewImg.removeAttribute('src');
+        previewImg.style.display = 'none';
+      }
     });
+
+    async function uploadProductImage(productId, file) {
+      const imageFormData = new FormData();
+      imageFormData.append('image', file);
+      imageFormData.append('is_main', 'true');
+
+      return APIClient.request(
+        'POST',
+        `/upload/products/${productId}/image`,
+        imageFormData
+      );
+    }
+
+    addProductForm.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      if (!requireAdmin()) return;
+
+      const name = document.getElementById('productName').value.trim();
+      const description = document.getElementById('description').value.trim();
+      const price = Number(document.getElementById('price').value || 0);
+      const stock = Number(document.getElementById('quantity').value || 0);
+      const imageFile = productImageInput.files && productImageInput.files[0];
+
+      if (!name) {
+        alert('Vui lòng nhập tên sản phẩm.');
+        return;
+      }
+
+      if (price < 0) {
+        alert('Giá sản phẩm không hợp lệ.');
+        return;
+      }
+
+      if (stock < 1) {
+        alert('Số lượng sản phẩm phải lớn hơn 0.');
+        return;
+      }
+
+      const payload = {
+        name: name,
+        description: description,
+        price: price,
+        stock: stock,
+        status: 'active',
+        is_featured: false,
+        artist_ids: []
+      };
+
+      try {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Đang thêm...';
+
+        // Bước 1: tạo sản phẩm trong bảng products
+        const createResponse = await APIClient.createAdminProduct(payload);
+        const productId = createResponse?.data?.id;
+
+        // Bước 2: nếu có ảnh thì upload ảnh và backend tự cập nhật products.image
+        if (imageFile && productId) {
+          await uploadProductImage(productId, imageFile);
+        }
+
+        alert('Thêm sản phẩm thành công.');
+        window.location.href = 'admin-products.html';
+      } catch (error) {
+        console.error(error);
+        alert(error.message || 'Lỗi thêm sản phẩm.');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Thêm sản phẩm';
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', requireAdmin);
   </script>
 </body>
 </html>

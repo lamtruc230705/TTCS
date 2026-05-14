@@ -1,37 +1,467 @@
 <!DOCTYPE html>
 <html lang="vi">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Thêm nghệ sĩ</title></head>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thêm nghệ sĩ</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      background: #b3ebff;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      max-width: 760px;
+      margin: 40px auto;
+      border-radius: 18px;
+      box-shadow: 0 6px 24px #b3dde7c5;
+      padding: 26px 40px 32px;
+    }
+
+    h2 {
+      color: #2381da;
+      display: flex;
+      align-items: center;
+      font-weight: 900;
+      font-size: 2rem;
+      margin: 0 0 20px;
+    }
+
+    h2::before {
+      content: "+";
+      color: #53c1ff;
+      font-size: 2.2rem;
+      margin-right: 11px;
+      font-weight: 900;
+    }
+
+    label {
+      font-weight: 700;
+      margin: 16px 0 7px;
+      display: block;
+      font-size: 1rem;
+      color: #222;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 13px 15px;
+      border-radius: 9px;
+      border: 1.5px solid #d7ecfa;
+      font-size: 1rem;
+      outline: none;
+      background: #fafdff;
+      font-family: inherit;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: #53c1ff;
+      background: #fff;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    #preview-img {
+      display: none;
+      max-height: 180px;
+      max-width: 100%;
+      margin-top: 12px;
+      border-radius: 10px;
+      border: 1.5px solid #e3eef8;
+      background: #e1f5ff;
+      object-fit: contain;
+    }
+
+    .note {
+      margin-top: 6px;
+      font-size: 13px;
+      color: #6b7280;
+      line-height: 1.45;
+    }
+
+    .form-btns {
+      display: flex;
+      gap: 18px;
+      margin-top: 24px;
+    }
+
+    .form-btns button {
+      flex: 1;
+      border: none;
+      font-size: 1.1em;
+      padding: 13px 0;
+      border-radius: 9px;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .back-btn {
+      background: #eee;
+      color: #333;
+      border: 1.5px solid #dadada !important;
+    }
+
+    .main-btn {
+      background: #0c61d5;
+      color: #fff;
+      border: 1.5px solid #1763be !important;
+    }
+
+    .main-btn:disabled {
+      opacity: .65;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 700px) {
+      .container {
+        margin: 20px 12px;
+        padding: 22px;
+      }
+
+      .row {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .form-btns {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
 <body>
-  <h2>Thêm nghệ sĩ mới</h2>
-  <form id="artistForm">
-    <input id="stage_name" placeholder="Nghệ danh" required><br>
-    <input id="full_name" placeholder="Họ tên" required><br>
-    <input id="birth_date" type="date"><br>
-    <input id="height" placeholder="Chiều cao"><br>
-    <input id="weight" placeholder="Cân nặng"><br>
-    <input id="partner_name" placeholder="Partner"><br>
-    <input id="mascot" placeholder="Linh vật"><br>
-    <button type="submit">Lưu</button>
-    <a href="admin-artists.html">Hủy</a>
-  </form>
+  <div class="container">
+    <h2>Thêm nghệ sĩ mới</h2>
+
+    <form id="artistForm">
+      <label for="stage_name">Nghệ danh</label>
+      <input type="text" id="stage_name" placeholder="Ví dụ: Sơn Tùng M-TP" required>
+
+      <label for="full_name">Họ tên đầy đủ</label>
+      <input type="text" id="full_name" placeholder="Ví dụ: Nguyễn Thanh Tùng">
+
+      <label for="user_id">Gmail tài khoản Artist</label>
+      <select id="user_id">
+        <option value="">-- Chọn Gmail tài khoản artist --</option>
+      </select>
+
+      <div class="note">
+        Chỉ hiển thị các tài khoản đã được admin tạo với vai trò <strong>artist</strong>.
+        Khi chọn Gmail, hồ sơ nghệ sĩ sẽ được liên kết với tài khoản đó.
+      </div>
+
+      <label for="artistImage">Ảnh nghệ sĩ</label>
+      <input type="file" id="artistImage" accept="image/*">
+      <img id="preview-img" alt="Ảnh nghệ sĩ">
+
+      <div class="row">
+        <div>
+          <label for="birth_date">Ngày sinh</label>
+          <input type="date" id="birth_date">
+        </div>
+
+        <div>
+          <label for="artist_role">Vai trò / lĩnh vực</label>
+          <input type="text" id="artist_role" placeholder="Ví dụ: Ca sĩ, diễn viên">
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label for="height">Chiều cao</label>
+          <input type="text" id="height" placeholder="Ví dụ: 170cm">
+        </div>
+
+        <div>
+          <label for="weight">Cân nặng</label>
+          <input type="text" id="weight" placeholder="Ví dụ: 60kg">
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label for="partner_name">Partner</label>
+          <input type="text" id="partner_name" placeholder="Ví dụ: Công ty quản lý / cộng sự">
+        </div>
+
+        <div>
+          <label for="mascot">Linh vật</label>
+          <input type="text" id="mascot" placeholder="Ví dụ: Mèo xanh">
+        </div>
+      </div>
+
+      <label for="description">Mô tả</label>
+      <textarea id="description" rows="3" placeholder="Mô tả ngắn về nghệ sĩ..."></textarea>
+
+      <label for="works">Tác phẩm</label>
+      <textarea id="works" rows="4" placeholder="Mỗi dòng một tác phẩm. Ví dụ:
+Chúng ta của hiện tại | 2020
+Muộn rồi mà sao còn | 2021"></textarea>
+
+      <div class="note">
+        Cách nhập: <strong>Tên tác phẩm | Năm</strong>. Nếu không có năm thì chỉ nhập tên tác phẩm.
+      </div>
+
+      <label for="status">Trạng thái</label>
+      <select id="status">
+        <option value="active">Hiển thị</option>
+        <option value="hidden">Ẩn</option>
+      </select>
+
+      <div class="form-btns">
+        <button type="button" class="back-btn" onclick="window.location.href='admin-artists.html'">
+          ← Quay lại
+        </button>
+        <button type="submit" class="main-btn">Thêm nghệ sĩ</button>
+      </div>
+    </form>
+  </div>
+
   <script src="../app.js"></script>
+
   <script>
-    document.getElementById('artistForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const payload = {
-        stage_name: document.getElementById('stage_name').value.trim(),
-        full_name: document.getElementById('full_name').value.trim(),
-        birth_date: document.getElementById('birth_date').value || null,
-        height: document.getElementById('height').value.trim(),
-        weight: document.getElementById('weight').value.trim(),
-        partner_name: document.getElementById('partner_name').value.trim(),
-        mascot: document.getElementById('mascot').value.trim(),
-        status: 'active'
-      };
-      await APIClient.createAdminArtist(payload);
-      alert('Đã tạo nghệ sĩ');
-      window.location.href = 'admin-artists.html';
+    const artistForm = document.getElementById('artistForm');
+    const artistImageInput = document.getElementById('artistImage');
+    const previewImg = document.getElementById('preview-img');
+    const submitBtn = document.querySelector('.main-btn');
+
+    const userSelect = document.getElementById('user_id');
+
+    let artistUsers = [];
+    let existingArtists = [];
+
+    function requireAdmin() {
+      const token = APIClient.getToken();
+      const user = APIClient.getCurrentUser();
+
+      if (!token || !user) {
+        alert('Bạn cần đăng nhập admin trước.');
+        window.location.href = '../login.html';
+        return false;
+      }
+
+      if (user.role !== 'admin') {
+        alert('Chỉ admin mới được thêm nghệ sĩ.');
+        window.location.href = '../login.html';
+        return false;
+      }
+
+      return true;
+    }
+
+    function emptyToNull(value) {
+      const text = String(value || '').trim();
+      return text === '' ? null : text;
+    }
+
+    function parseWorks(text) {
+      return String(text || '')
+        .split('\n')
+        .map(line => line.trim())
+        .filter(Boolean)
+        .map(line => {
+          const parts = line.split('|').map(item => item.trim());
+          const title = parts[0];
+          const yearText = parts[1];
+          const releaseYear = yearText ? Number(yearText) : null;
+
+          return {
+            title: title,
+            release_year: Number.isInteger(releaseYear) ? releaseYear : null
+          };
+        })
+        .filter(work => work.title);
+    }
+
+    async function uploadArtistImage(artistId, file) {
+      const imageFormData = new FormData();
+      imageFormData.append('image', file);
+
+      return APIClient.request(
+        'POST',
+        `/upload/artists/${artistId}/image`,
+        imageFormData
+      );
+    }
+
+    async function loadArtistUserOptions() {
+      try {
+        const [usersResponse, artistsResponse] = await Promise.all([
+          APIClient.getAdminUsers(),
+          APIClient.getAdminArtists()
+        ]);
+
+        const users = usersResponse?.data || [];
+        existingArtists = artistsResponse?.data || [];
+
+        artistUsers = users.filter(user => user.role === 'artist');
+
+        userSelect.innerHTML = `
+          <option value="">-- Chọn Gmail tài khoản artist --</option>
+        `;
+
+        if (!artistUsers.length) {
+          userSelect.innerHTML += `
+            <option value="" disabled>Chưa có tài khoản role artist</option>
+          `;
+          return;
+        }
+
+        artistUsers.forEach(user => {
+          const linkedArtist = existingArtists.find(
+            artist => String(artist.user_id) === String(user.id)
+          );
+
+          const linkedText = linkedArtist
+            ? ` - đã có hồ sơ: ${linkedArtist.stage_name || 'Chưa đặt tên'}`
+            : ' - chưa có hồ sơ';
+
+          const option = document.createElement('option');
+          option.value = user.id;
+          option.textContent = `${user.email} (${user.username})${linkedText}`;
+
+          userSelect.appendChild(option);
+        });
+      } catch (error) {
+        console.error(error);
+        alert(error.message || 'Lỗi tải danh sách Gmail artist.');
+      }
+    }
+
+    function getSelectedArtistUser() {
+      const selectedUserId = userSelect.value;
+
+      if (!selectedUserId) return null;
+
+      return artistUsers.find(user => String(user.id) === String(selectedUserId)) || null;
+    }
+
+    function getExistingArtistByUserId(userId) {
+      if (!userId) return null;
+
+      return existingArtists.find(
+        artist => String(artist.user_id) === String(userId)
+      ) || null;
+    }
+
+    userSelect.addEventListener('change', function () {
+      const selectedUser = getSelectedArtistUser();
+
+      if (!selectedUser) return;
+
+      const stageNameInput = document.getElementById('stage_name');
+      const fullNameInput = document.getElementById('full_name');
+
+      if (!stageNameInput.value.trim()) {
+        stageNameInput.value =
+          selectedUser.full_name ||
+          selectedUser.username ||
+          selectedUser.email;
+      }
+
+      if (!fullNameInput.value.trim()) {
+        fullNameInput.value =
+          selectedUser.full_name ||
+          selectedUser.username ||
+          '';
+      }
     });
+
+    artistImageInput.addEventListener('change', function (e) {
+      const file = e.target.files && e.target.files[0];
+
+      if (file) {
+        previewImg.src = URL.createObjectURL(file);
+        previewImg.style.display = 'block';
+      } else {
+        previewImg.removeAttribute('src');
+        previewImg.style.display = 'none';
+      }
+    });
+
+    artistForm.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      if (!requireAdmin()) return;
+
+      const selectedUserId = Number(userSelect.value);
+
+      if (!selectedUserId) {
+        alert('Vui lòng chọn Gmail tài khoản artist.');
+        return;
+      }
+      const imageFile = artistImageInput.files && artistImageInput.files[0];
+
+      const payload = {
+        user_id: selectedUserId,
+        stage_name: document.getElementById('stage_name').value.trim(),
+        full_name: emptyToNull(document.getElementById('full_name').value),
+        birth_date: document.getElementById('birth_date').value || null,
+        height: emptyToNull(document.getElementById('height').value),
+        weight: emptyToNull(document.getElementById('weight').value),
+        partner_name: emptyToNull(document.getElementById('partner_name').value),
+        mascot: emptyToNull(document.getElementById('mascot').value),
+        artist_role: emptyToNull(document.getElementById('artist_role').value),
+        description: emptyToNull(document.getElementById('description').value),
+        works: parseWorks(document.getElementById('works').value),
+        status: document.getElementById('status').value || 'active',
+        is_featured: false
+      };
+
+      if (!payload.stage_name) {
+        alert('Vui lòng nhập nghệ danh.');
+        return;
+      }
+
+      try {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Đang lưu...';
+
+        let artistId = null;
+
+        const existingArtist = getExistingArtistByUserId(selectedUserId);
+
+        if (existingArtist) {
+          await APIClient.updateAdminArtist(existingArtist.id, payload);
+          artistId = existingArtist.id;
+        } else {
+          const response = await APIClient.createAdminArtist(payload);
+          artistId = response?.data?.id;
+        }
+
+        if (imageFile && artistId) {
+          await uploadArtistImage(artistId, imageFile);
+        }
+
+        alert('Lưu hồ sơ nghệ sĩ thành công.');
+        window.location.href = 'admin-artists.html';
+      } catch (error) {
+        console.error(error);
+        alert(error.message || 'Lỗi lưu hồ sơ nghệ sĩ.');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Thêm nghệ sĩ';
+      }
+    });
+
+    async function initPage() {
+      if (!requireAdmin()) return;
+      await loadArtistUserOptions();
+    }
+
+    document.addEventListener('DOMContentLoaded', initPage);
   </script>
 </body>
 </html>
