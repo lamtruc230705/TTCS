@@ -1,7 +1,12 @@
 const Joi = require('joi');
 
 const artistSchema = Joi.object({
-  user_id: Joi.number().integer().positive().allow(null),
+  user_id: Joi.number().integer().positive().required().messages({
+    'any.required': 'Vui lòng chọn Gmail tài khoản artist',
+    'number.base': 'Gmail tài khoản artist không hợp lệ',
+    'number.integer': 'Gmail tài khoản artist không hợp lệ',
+    'number.positive': 'Gmail tài khoản artist không hợp lệ'
+  }),
   stage_name: Joi.string().max(150).required(),
   full_name: Joi.string().max(150).allow('', null),
   first_name: Joi.string().max(100).allow('', null),
